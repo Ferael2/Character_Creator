@@ -1,0 +1,351 @@
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --ink:         #110d10;
+  --parchment:   #1c1510;
+  --smoke:       #2a1f1a;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+  --shadow-gold: 0 0 24px rgba(201, 168, 76, 0.35);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Root Wrapper ── */
+.welcome-root {
+  position: relative;
+  min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(139, 26, 26, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201, 168, 76, 0.08) 0%, transparent 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(201, 168, 76, 0.03) 39px,
+      rgba(201, 168, 76, 0.03) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(201, 168, 76, 0.03) 39px,
+      rgba(201, 168, 76, 0.03) 40px
+    );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.welcome-root.visible { opacity: 1; }
+
+/* ── Rune Borders ── */
+.rune-border {
+  position: absolute;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 16px;
+  overflow: hidden;
+  border-color: var(--gold-dim);
+  z-index: 2;
+}
+.rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); }
+.rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); }
+
+.rune {
+  font-family: serif;
+  font-size: 17px;
+  color: var(--gold-dim);
+  opacity: 0;
+  animation: runeAppear 0.4s forwards;
+  user-select: none;
+}
+@keyframes runeAppear {
+  to { opacity: 0.7; }
+}
+
+/* ── Floating Particles ── */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  color: var(--gold);
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0)   rotate(0deg);   opacity: 0; }
+  10%  { opacity: 0.3; }
+  90%  { opacity: 0.15; }
+  100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+}
+
+/* ── Corner Ornaments ── */
+.corner {
+  position: absolute;
+  font-size: 20px;
+  color: var(--gold-dim);
+  z-index: 3;
+  opacity: 0.7;
+}
+.corner.tl { top:  32px; left:  32px; }
+.corner.tr { top:  32px; right: 32px; }
+.corner.bl { bottom: 32px; left:  32px; }
+.corner.br { bottom: 32px; right: 32px; }
+
+/* ── Main Content ── */
+.welcome-main {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  padding: 60px 24px;
+  max-width: 760px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ── Crest ── */
+.crest {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crest-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-dim);
+}
+.crest-ring.outer {
+  width: 100px; height: 100px;
+  animation: rotateSlow 20s linear infinite;
+  border-style: dashed;
+}
+.crest-ring.inner {
+  width: 72px; height: 72px;
+  animation: rotateSlow 12s linear infinite reverse;
+  border-color: var(--crimson);
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.crest-d20 {
+  font-size: 42px;
+  color: var(--gold);
+  text-shadow: var(--shadow-gold);
+  animation: pulseGlow 3s ease-in-out infinite;
+  line-height: 1;
+}
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(201, 168, 76, 0.5), 0 0 40px rgba(201, 168, 76, 0.2); }
+  50%       { text-shadow: 0 0 40px rgba(201, 168, 76, 0.9), 0 0 80px rgba(201, 168, 76, 0.4); }
+}
+
+/* ── Title Block ── */
+.eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: -16px;
+}
+
+.title {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 900;
+  line-height: 1.05;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.title-line {
+  display: block;
+  font-size: clamp(42px, 8vw, 80px);
+  color: var(--text-body);
+  letter-spacing: -0.01em;
+}
+.title-line.accent {
+  color: var(--gold);
+  text-shadow: 0 0 60px rgba(201, 168, 76, 0.4);
+}
+
+.subtitle {
+  font-family: 'Crimson Text', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-left: 13%;
+}
+
+/* ── Class Row ── */
+.classes-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.class-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid var(--gold-dim);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.class-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.class-chip:hover,
+.class-chip.active {
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 0 14px rgba(201, 168, 76, 0.2), inset 0 0 10px rgba(201, 168, 76, 0.05);
+}
+.class-chip:hover::before,
+.class-chip.active::before { opacity: 1; }
+
+.chip-icon { font-size: 18px; }
+.chip-name { position: relative; z-index: 1; }
+
+/* ── CTA Button ── */
+.begin-btn {
+  position: relative;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--crimson) 0%, #6b1010 100%);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%);
+}
+
+.begin-btn:hover .btn-inner {
+  background: linear-gradient(135deg, var(--crimson-lit) 0%, var(--crimson) 100%);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(139, 26, 26, 0.6);
+}
+
+.begin-btn.rolling .btn-inner {
+  animation: btnRoll 0.9s ease forwards;
+}
+@keyframes btnRoll {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.95) rotate(-2deg); }
+  60%  { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(0) rotate(5deg); opacity: 0; }
+}
+
+.btn-d20 {
+  font-size: 20px;
+  animation: spinSlow 4s linear infinite;
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.begin-btn.rolling .btn-d20 {
+  animation: spinFast 0.1s linear infinite;
+}
+@keyframes spinFast {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.btn-glow {
+  position: absolute;
+  inset: -4px;
+  background: radial-gradient(ellipse, rgba(139, 26, 26, 0.4), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.begin-btn:hover .btn-glow { opacity: 1; }
+
+/* ── Fine Print ── */
+.fine-print {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .welcome-main { gap: 28px; padding: 80px 20px; }
+  .corner { font-size: 18px; }
+  .corner.tl, .corner.tr { top: 44px; }
+  .corner.bl, .corner.br { bottom: 44px; }
+  .classes-row { gap: 8px; }
+  .class-chip { padding: 6px 12px; font-size: 17px; }
+  .btn-inner { padding: 14px 28px; font-size: 17px; }
+}

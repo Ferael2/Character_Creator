@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --panel-bg:    #12100c;
+  --panel-border:#3a2e18;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+  --steel:       #a8c0d0;
+  --pos-green:   #7ec87e;
+  --neg-red:     #c87e7e;
+  --violet:      #c4a0f0;
+  --violet-dim:  #7a50b0;
+}
+
+/* ── Root ── */
+.lu-root {
+  position: relative; min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 70% 35% at 50% 0%,   rgba(139,26,26,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(196,160,240,0.06) 0%, transparent 65%),
+    repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,168,76,0.018) 39px, rgba(201,168,76,0.018) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.018) 39px, rgba(201,168,76,0.018) 40px);
+  opacity: 0; transition: opacity 0.7s ease; overflow-x: hidden;
+}
+.lu-root.visible { opacity: 1; }
+
+/* ── Rune chrome ── */
+.lu-rune-border {
+  position: fixed; left: 0; right: 0; z-index: 10;
+  display: flex; justify-content: center; gap: 4px; padding: 8px 16px; overflow: hidden;
+}
+.lu-rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); background: rgba(10,6,8,0.96); }
+.lu-rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); background: rgba(10,6,8,0.96); }
+.lu-rune { font-family: serif; font-size: 12px; color: var(--gold-dim); opacity: 0; animation: luRuneIn 0.3s forwards; user-select: none; }
+@keyframes luRuneIn { to { opacity: 0.65; } }
+.lu-corner { position: fixed; font-size: 16px; color: var(--gold); z-index: 11; animation: luRuneIn 1s ease both; }
+.lu-corner.tl { top: 14px;    left: 18px;  }
+.lu-corner.tr { top: 14px;    right: 18px; }
+.lu-corner.bl { bottom: 14px; left: 18px;  }
+.lu-corner.br { bottom: 14px; right: 18px; }
+
+/* ── Main ── */
+.lu-main {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 820px; margin: 0 auto;
+  padding: 80px 24px 120px;
+  display: flex; flex-direction: column; gap: 36px;
+}
+
+/* ── Header ── */
+.lu-header { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.lu-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold-dim); margin: 0; }
+.lu-title {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+  font-family: 'Cinzel Decorative', serif; font-size: clamp(22px, 5vw, 38px);
+  font-weight: 900; color: var(--gold-light); margin: 0;
+  text-shadow: 0 0 40px rgba(201,168,76,0.4);
+}
+.lu-level-badge {
+  font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600;
+  color: var(--violet); border: 1px solid var(--violet-dim);
+  padding: 4px 14px; background: rgba(196,160,240,0.08);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.lu-subtitle {
+  font-family: 'Crimson Text', serif; font-size: 17px; font-style: italic;
+  color: var(--text-muted); max-width: 520px; line-height: 1.6; margin: 0;
+}
+
+/* ── Choices list ── */
+.lu-choices-list { display: flex; flex-direction: column; gap: 36px; }
+
+/* ── Choice block ── */
+.lu-choice-block {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  padding: 24px;
+  animation: luFadeUp 0.4s ease both;
+}
+@keyframes luFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.lu-choice-title {
+  font-family: 'Cinzel Decorative', serif; font-size: 18px; font-weight: 700;
+  color: var(--gold); letter-spacing: 0.04em; margin-bottom: 8px;
+}
+.lu-choice-count {
+  font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-dim);
+  font-weight: 400; letter-spacing: 0.06em;
+}
+.lu-choice-desc {
+  font-family: 'Crimson Text', serif; font-size: 15px; color: var(--text-muted);
+  font-style: italic; line-height: 1.6; margin: 0 0 18px;
+}
+
+/* ── Option grid ── */
+.lu-option-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.lu-option-card {
+  position: relative; text-align: left;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 14px 14px 18px;
+  background: linear-gradient(160deg, #1c1410, #110d0a);
+  border: 1px solid var(--gold-dim); cursor: pointer;
+  transition: all 0.18s; font: inherit;
+}
+.lu-option-card:hover { border-color: rgba(201,168,76,0.6); background: rgba(201,168,76,0.04); transform: translateY(-2px); }
+.lu-option-card.selected {
+  border-color: var(--gold); background: rgba(201,168,76,0.1);
+  box-shadow: 0 0 14px rgba(201,168,76,0.2);
+}
+.lu-option-card.dim { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.lu-option-epic.selected { border-color: var(--violet); background: rgba(196,160,240,0.1); box-shadow: 0 0 14px rgba(196,160,240,0.2); }
+.lu-check {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--gold); color: #0e0a04;
+  font-size: 10px; font-family: 'Cinzel', serif; font-weight: 900;
+  padding: 1px 6px; line-height: 1.5;
+}
+.lu-option-epic .lu-check { background: var(--violet); }
+.lu-option-name {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.04em;
+}
+.lu-option-desc {
+  font-family: 'Crimson Text', serif; font-size: 13px; color: var(--text-muted);
+  font-style: italic; line-height: 1.5;
+}
+.lu-option-prereq {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gold-dim);
+  border: 1px solid var(--gold-dim); border-radius: 3px;
+  padding: 1px 6px; align-self: flex-start;
+}
+.lu-invoc-pact-note {
+  font-style: italic; color: var(--gold); font-size: 12px; margin-left: 4px;
+}
+
+/* ── ASI ── */
+.lu-asi-mode-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.lu-mode-btn {
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 8px 18px;
+  background: rgba(201,168,76,0.04); border: 1px solid var(--gold-dim);
+  color: var(--text-muted); cursor: pointer; transition: all 0.18s;
+}
+.lu-mode-btn:hover { border-color: var(--gold); color: var(--gold); }
+.lu-mode-btn.active { border-color: var(--gold); color: var(--gold-light); background: rgba(201,168,76,0.1); }
+
+.lu-budget-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.lu-budget-label { font-family: 'Cinzel', serif; font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; }
+.lu-budget-pips { display: flex; gap: 6px; }
+.lu-budget-pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--gold-dim); background: transparent; }
+.lu-budget-pip.used { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,168,76,0.4); }
+
+.lu-asi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 500px) { .lu-asi-grid { grid-template-columns: repeat(2, 1fr); } }
+.lu-asi-card {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 8px 10px;
+  background: linear-gradient(160deg, #1c1410, #110d0a);
+  border: 1px solid var(--panel-border); transition: border-color 0.2s;
+}
+.lu-asi-card.boosted { border-color: var(--gold); box-shadow: 0 0 10px rgba(201,168,76,0.15); }
+.lu-asi-name { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dim); }
+.lu-asi-score { font-family: 'Cinzel Decorative', serif; font-size: 26px; font-weight: 900; color: var(--gold); line-height: 1; }
+.lu-asi-mod { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; }
+.lu-asi-mod.pos { color: var(--pos-green); }
+.lu-asi-mod.neg { color: var(--neg-red); }
+.lu-asi-badge {
+  position: absolute; top: -8px; right: -8px;
+  background: var(--gold); color: #0e0a04;
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 900;
+  padding: 1px 6px;
+}
+.lu-asi-btns { display: flex; gap: 6px; margin-top: 4px; }
+.lu-asi-btn {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  background: rgba(201,168,76,0.06); border: 1px solid var(--gold-dim);
+  color: var(--gold); cursor: pointer; font-size: 16px; font-family: serif;
+  transition: all 0.15s;
+}
+.lu-asi-btn:hover:not(:disabled) { background: rgba(201,168,76,0.14); border-color: var(--gold); }
+.lu-asi-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+/* ── Confirm ── */
+.lu-confirm-area { display: flex; justify-content: center; padding-top: 8px; }
+.lu-confirm-btn { padding: 0; background: none; border: none; cursor: pointer; }
+.lu-confirm-inner {
+  display: flex; align-items: center; gap: 12px; padding: 15px 40px;
+  background: linear-gradient(135deg, var(--crimson), #6b1010);
+  border: 1px solid rgba(201,168,76,0.3);
+  font-family: 'Cinzel Decorative', serif; font-size: 15px; font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.06em; transition: all 0.2s;
+}
+.lu-confirm-btn.ready .lu-confirm-inner:hover {
+  background: linear-gradient(135deg, var(--crimson-lit), var(--crimson));
+  box-shadow: 0 0 24px rgba(139,26,26,0.5);
+}
+.lu-confirm-btn.dim .lu-confirm-inner {
+  background: linear-gradient(135deg, #2a1f10, #1a1208);
+  border-color: var(--gold-dim); color: var(--gold-dim); cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .lu-main { padding: 72px 14px 100px; gap: 26px; }
+  .lu-option-grid { grid-template-columns: 1fr; }
+  .lu-choice-block { padding: 16px; }
+}

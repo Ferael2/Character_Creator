@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+}
+
+/* ── Root ── */
+.bg-root {
+  position: relative;
+  min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,   rgba(139,26,26,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(201,168,76,0.07) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.bg-root.visible { opacity: 1; }
+
+/* ── Shared chrome (runes, particles, corners) ── */
+.bg-root .rune-border {
+  position: absolute; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 4px;
+  padding: 10px 16px; overflow: hidden; z-index: 2;
+}
+.bg-root .rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); }
+.bg-root .rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); }
+.bg-root .rune {
+  font-family: serif; font-size: 17px; color: var(--gold-dim);
+  opacity: 0; animation: runeAppear 0.4s forwards; user-select: none;
+}
+@keyframes runeAppear { to { opacity: 0.7; } }
+
+.bg-root .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.bg-root .particle {
+  position: absolute; bottom: -20px; color: var(--gold); opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.25; }
+  90%  { opacity: 0.12; }
+  100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+}
+
+.bg-root .corner { position: absolute; font-size: 20px; color: var(--gold-dim); z-index: 3; opacity: 0.7; }
+.bg-root .corner.tl { top: 32px;    left:  32px; }
+.bg-root .corner.tr { top: 32px;    right: 32px; }
+.bg-root .corner.bl { bottom: 32px; left:  32px; }
+.bg-root .corner.br { bottom: 32px; right: 32px; }
+
+/* ── Main ── */
+.bg-main {
+  position: relative; z-index: 5;
+  width: 100%; max-width: 820px;
+  padding: 72px 24px 88px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 32px;
+}
+
+/* ── Header ── */
+.bg-header { text-align: center; display: flex; flex-direction: column; gap: 8px; }
+
+.bg-root .eyebrow {
+  font-family: 'Cinzel', serif; font-size: 17px;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dim);
+}
+.bg-title {
+  font-family: 'Cinzel Decorative', serif; font-weight: 900;
+  font-size: clamp(28px, 5vw, 52px); color: var(--text-body); line-height: 1.1;
+}
+.bg-title .accent { color: var(--gold); text-shadow: 0 0 40px rgba(201,168,76,0.35); }
+
+.race-reminder {
+  font-family: 'Cinzel', serif; font-size: 18px;
+  letter-spacing: 0.1em; color: var(--gold-dim);
+}
+.race-name { color: var(--gold); }
+
+.bg-subtitle {
+  font-family: 'Crimson Text', serif; font-size: 18px; font-style: italic;
+  color: var(--text-muted); max-width: 480px; margin: 0 auto; line-height: 1.6;
+}
+
+/* ── Carousel wrap ── */
+.carousel-wrap {
+  display: flex; align-items: center; gap: 16px; width: 100%;
+}
+
+/* ── Arrows ── */
+.nav-arrow {
+  flex-shrink: 0; width: 48px; height: 48px;
+  background: rgba(201,168,76,0.06); border: 1px solid var(--gold-dim);
+  color: var(--gold-dim); font-size: 17px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.22s ease;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+.nav-arrow:hover {
+  background: rgba(201,168,76,0.15); border-color: var(--gold);
+  color: var(--gold); box-shadow: 0 0 16px rgba(201,168,76,0.2);
+}
+
+/* ── Card stage ── */
+.card-stage { flex: 1; min-width: 0; overflow: hidden; }
+
+/* ── Card ── */
+.bg-card {
+  display: flex; flex-direction: column;
+  background: linear-gradient(160deg, #1c1410 0%, #110d0a 100%);
+  border: 1px solid var(--gold-dim);
+  width: 100%; position: relative; overflow: hidden;
+}
+.bg-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,168,76,0.05), transparent 70%);
+  z-index: 0;
+}
+
+.bg-card.enter      { animation: slideIn 0.28s ease forwards; }
+.bg-card.exit-right { animation: slideOutLeft 0.28s ease forwards; pointer-events: none; }
+.bg-card.exit-left  { animation: slideOutRight 0.28s ease forwards; pointer-events: none; }
+
+@keyframes slideIn       { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideOutLeft  { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-28px); } }
+@keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(28px); } }
+
+.bg-card.chosen { border-color: var(--gold-light); animation: chosenPulse 0.65s ease forwards; }
+@keyframes chosenPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.015); box-shadow: 0 0 40px rgba(201,168,76,0.35); }
+  100% { transform: scale(0.97); opacity: 0.4; }
+}
+
+/* ── Card Head ── */
+.card-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 20px 22px 14px; position: relative; z-index: 1; gap: 12px;
+}
+.card-head-left { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.card-counter {
+  font-family: 'Cinzel', serif; font-size: 18px;
+  letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase;
+}
+.card-title-row { display: flex; align-items: center; gap: 10px; }
+.card-bg-icon { font-size: 26px; line-height: 1; }
+.card-title {
+  font-family: 'Cinzel', serif; font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1;
+}
+.card-summary {
+  font-family: 'Crimson Text', serif; font-size: 20px; font-style: italic;
+  color: var(--text-muted); line-height: 1.55;
+}
+.card-head-runes {
+  display: flex; flex-direction: column; gap: 4px;
+  font-family: serif; font-size: 18px; color: var(--gold-dim); opacity: 0.45;
+  flex-shrink: 0;
+}
+
+/* ── Divider ── */
+.card-divider {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 22px; position: relative; z-index: 1;
+}
+.divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+}
+.divider-diamond { font-size: 17px; color: var(--gold-dim); opacity: 0.7; }
+
+/* ── Tabs bar ── */
+.tabs-bar {
+  display: flex; position: relative; z-index: 1;
+  border-bottom: 1px solid var(--gold-dim);
+  padding: 0 22px;
+  gap: 0;
+}
+.tab-btn {
+  font-family: 'Cinzel', serif; font-size: 17px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); background: none; border: none;
+  padding: 12px 16px 10px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--gold-light); }
+.tab-btn.active {
+  color: var(--gold); border-bottom-color: var(--gold);
+}
+
+/* ── Tab Panel ── */
+.tab-panel {
+  position: relative; z-index: 1;
+  min-height: 160px;
+  padding: 20px 22px;
+}
+.panel-content { display: flex; flex-direction: column; gap: 14px; animation: panelIn 0.2s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.panel-note {
+  font-family: 'Crimson Text', serif; font-style: italic;
+  font-size: 18px; color: var(--text-muted); line-height: 1.55;
+}
+
+/* Ability scores */
+.ability-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.ability-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  background: rgba(201,168,76,0.07); border: 1px solid var(--gold-dim);
+  font-family: 'Cinzel', serif; font-size: 18px;
+  color: var(--gold-light); letter-spacing: 0.06em;
+}
+.ability-icon { color: var(--gold); font-size: 18px; }
+
+/* Feat */
+.feat-block {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 18px;
+  background: rgba(139,26,26,0.12); border: 1px solid rgba(139,26,26,0.4);
+}
+.feat-block-header {
+  display: flex; align-items: center; gap: 12px;
+}
+.feat-star { color: var(--gold); font-size: 17px; flex-shrink: 0; }
+.feat-name {
+  font-family: 'Cinzel', serif; font-size: 17px;
+  font-weight: 600; color: var(--gold-light); letter-spacing: 0.05em;
+}
+.feat-desc {
+  font-family: 'Crimson Text', serif; font-size: 18px;
+  line-height: 1.65; color: var(--text-muted);
+  padding-left: 25px;
+}
+
+/* Two-col panel */
+.two-col { flex-direction: row !important; gap: 24px !important; }
+.info-group { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.info-group-title {
+  font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim);
+}
+.info-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.info-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Crimson Text', serif; font-size: 17px; color: var(--text-body);
+}
+.list-dot { color: var(--gold-dim); font-size: 18px; flex-shrink: 0; }
+
+/* Equipment */
+.equipment-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.equipment-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Crimson Text', serif; font-size: 17px; color: var(--text-body);
+}
+.equip-dot { color: var(--gold-dim); font-size: 17px; flex-shrink: 0; }
+
+/* ── Card foot ── */
+.card-foot {
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 14px 22px 20px; position: relative; z-index: 1;
+}
+
+/* ── Choose button ── */
+.choose-btn { padding: 0; background: none; border: none; cursor: pointer; outline: none; align-self: flex-start; }
+.choose-btn-inner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--crimson) 0%, #6b1010 100%);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-light);
+  font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  transition: all 0.25s ease;
+  clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%);
+}
+.choose-btn:hover .choose-btn-inner {
+  background: linear-gradient(135deg, var(--crimson-lit) 0%, var(--crimson) 100%);
+  border-color: var(--gold); color: #fff;
+  box-shadow: 0 0 24px rgba(139,26,26,0.5);
+}
+.choose-btn.chosen .choose-btn-inner { opacity: 0.4; pointer-events: none; }
+.choose-icon { font-size: 18px; }
+
+/* ── Index ── */
+.bg-index {
+  display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; width: 100%;
+}
+.index-pip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  background: rgba(201,168,76,0.04); border: 1px solid var(--gold-dim);
+  color: var(--text-muted); font-family: 'Cinzel', serif;
+  font-size: 18px; letter-spacing: 0.08em;
+  cursor: pointer; transition: all 0.2s ease; opacity: 0.55;
+}
+.index-pip:hover { opacity: 1; border-color: var(--gold); color: var(--gold-light); background: rgba(201,168,76,0.1); }
+.index-pip.active { opacity: 1; border-color: var(--gold); color: var(--gold-light); background: rgba(201,168,76,0.12); box-shadow: 0 0 8px rgba(201,168,76,0.15); }
+.pip-icon { font-size: 17px; }
+.pip-name { display: none; }
+
+@media (min-width: 600px) { .pip-name { display: inline; } }
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+  .bg-main { padding: 72px 12px 88px; gap: 22px; }
+  .carousel-wrap { gap: 8px; }
+  .nav-arrow { width: 38px; height: 38px; font-size: 17px; }
+  .card-head { padding: 16px 16px 10px; }
+  .tabs-bar { padding: 0 12px; overflow-x: auto; }
+  .tab-btn { padding: 10px 11px 8px; font-size: 18px; }
+  .tab-panel { padding: 16px; }
+  .two-col { flex-direction: column !important; gap: 16px !important; }
+  .card-foot { padding: 12px 16px 16px; }
+}

@@ -1,0 +1,595 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --panel-bg:    #12100c;
+  --panel-border:#3a2e18;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+  --text-light:  #e8d9b8;
+  --steel:       #a8c0d0;
+  --steel-dim:   #3a5060;
+  --pos-green:   #7ec87e;
+  --neg-red:     #c87e7e;
+}
+
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+.cs-root {
+  position: relative; min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 80% 35% at 50% 0%,   rgba(139,26,26,0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 30% at 50% 100%, rgba(201,168,76,0.06) 0%, transparent 65%),
+    repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,168,76,0.018) 39px, rgba(201,168,76,0.018) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.018) 39px, rgba(201,168,76,0.018) 40px);
+  opacity: 0; transition: opacity 0.8s ease; overflow-x: hidden;
+}
+.cs-root.visible { opacity: 1; }
+
+/* ── Rune chrome ──────────────────────────────────────────────────────────── */
+.cs-rune-border {
+  position: fixed; left: 0; right: 0; z-index: 10;
+  display: flex; justify-content: center; gap: 4px;
+  padding: 8px 16px; overflow: hidden;
+}
+.cs-rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); background: rgba(10,6,8,0.96); }
+.cs-rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); background: rgba(10,6,8,0.96); }
+.cs-rune {
+  font-family: serif; font-size: 16px; color: var(--gold-dim);
+  opacity: 0; animation: csRuneIn 0.3s forwards; user-select: none;
+}
+@keyframes csRuneIn { to { opacity: 0.65; } }
+.cs-corner {
+  position: fixed; font-size: 16px; color: var(--gold); z-index: 11;
+  animation: csRuneIn 1s ease both;
+}
+.cs-corner.tl { top: 14px;    left: 18px;  }
+.cs-corner.tr { top: 14px;    right: 18px; }
+.cs-corner.bl { bottom: 14px; left: 18px;  }
+.cs-corner.br { bottom: 14px; right: 18px; }
+.cs-particles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.cs-particle {
+  position: absolute; bottom: -20px; color: var(--gold); opacity: 0;
+  animation: csFloat linear infinite;
+}
+@keyframes csFloat {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 0.18; } 90% { opacity: 0.07; }
+  100% { transform: translateY(-105vh); opacity: 0; }
+}
+
+/* ── Main container ───────────────────────────────────────────────────────── */
+.cs-main {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 960px; margin: 0 auto;
+  padding: 72px 24px 100px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+/* ── Eyebrow ──────────────────────────────────────────────────────────────── */
+.cs-eyebrow-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.cs-eyebrow {
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold-dim); margin: 0;
+}
+.cs-identity-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.cs-badge {
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.1em;
+  color: var(--gold-dim); border: 1px solid var(--gold-dim);
+  padding: 3px 10px; background: rgba(201,168,76,0.04);
+}
+
+/* ── Ornament ─────────────────────────────────────────────────────────────── */
+.cs-ornament { display: flex; align-items: center; gap: 10px; width: 100%; }
+.cs-orn-line { flex: 1; height: 1px; background: var(--panel-border); }
+.cs-orn-diamond { color: var(--gold-dim); font-size: 13px; }
+.cs-orn-rune { font-family: serif; color: var(--gold-dim); font-size: 13px; opacity: 0.6; }
+
+/* ── Zone animation ───────────────────────────────────────────────────────── */
+.cs-zone { width: 100%; animation: csFadeUp 0.6s ease both; }
+@keyframes csFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.cs-zone-top        { animation-delay: 0.05s; }
+.cs-zone-abilities  { animation-delay: 0.15s; }
+.cs-zone-tabs       { animation-delay: 0.25s; }
+
+/* ── Zone top: portrait + identity ───────────────────────────────────────── */
+.cs-zone-top { display: flex; gap: 24px; align-items: flex-start; }
+
+/* Portrait */
+.cs-portrait-col { flex-shrink: 0; }
+.cs-portrait-drop {
+  width: 180px; height: 230px;
+  border: 2px dashed var(--gold-dim);
+  background: linear-gradient(160deg, #1a1208, #0f0c06);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cs-portrait-drop:hover, .cs-portrait-drop.dragging {
+  border-color: var(--gold); background: rgba(201,168,76,0.05);
+}
+.cs-portrait-drop.has-image { border-style: solid; border-color: var(--gold-dim); }
+.cs-portrait-img   { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cs-portrait-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px;
+}
+.cs-portrait-rune  { font-family: serif; font-size: 52px; color: var(--gold-dim); opacity: 0.4; line-height: 1; }
+.cs-portrait-hint  {
+  font-family: 'Cinzel', serif; font-size: 16px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted); text-align: center; line-height: 1.7; margin: 0;
+}
+.cs-portrait-hint span { color: var(--gold-dim); font-size: 17px; }
+.cs-portrait-change {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(10,6,8,0.88); border: none; border-top: 1px solid var(--gold-dim);
+  color: var(--gold); font-family: 'Cinzel', serif; font-size: 16px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 7px; cursor: pointer; opacity: 0; transition: opacity 0.2s;
+}
+.cs-portrait-drop:hover .cs-portrait-change { opacity: 1; }
+.cs-file-hidden { display: none; }
+
+/* Identity column */
+.cs-identity-col { flex: 1; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* Name */
+.cs-name-wrap { position: relative; display: flex; flex-direction: column; gap: 4px; }
+.cs-name-label {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.2em; color: var(--gold-dim);
+}
+.cs-name-input {
+  background: transparent; border: none; outline: none;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(20px, 3.5vw, 32px); font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.04em;
+  width: 100%; padding: 4px 0; caret-color: var(--gold);
+}
+.cs-name-input::placeholder { color: rgba(201,168,76,0.2); }
+.cs-name-underline { height: 1px; background: linear-gradient(90deg, var(--gold-dim), transparent); }
+
+/* Identity grid */
+.cs-identity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cs-identity-cell {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--panel-border);
+  background: rgba(201,168,76,0.03);
+}
+.cs-id-label {
+  font-family: 'Cinzel', serif; font-size: 16px; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--gold-dim);
+}
+.cs-id-value {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--text-body);
+  font-weight: 600; letter-spacing: 0.03em;
+}
+
+/* Combat strip */
+.cs-combat-strip {
+  display: flex; align-items: stretch;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(135deg, rgba(201,168,76,0.05), rgba(0,0,0,0.3));
+}
+.cs-combat-stat {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 14px 8px; text-align: center;
+}
+.cs-combat-value {
+  font-family: 'Cinzel Decorative', serif; font-size: 28px; font-weight: 900;
+  color: var(--gold-light); line-height: 1;
+}
+.cs-combat-stat.ac   .cs-combat-value { color: var(--steel); }
+.cs-combat-stat.hp   .cs-combat-value { color: #e07070; }
+.cs-combat-label {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--gold-dim);
+}
+.cs-combat-sub {
+  font-family: 'Crimson Text', serif; font-size: 17px; color: var(--text-muted);
+  font-style: italic;
+}
+.cs-combat-divider { width: 1px; background: var(--panel-border); align-self: stretch; flex-shrink: 0; }
+
+/* ── Ability scores ───────────────────────────────────────────────────────── */
+.cs-zone-abilities { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.cs-zone-title {
+  font-family: 'Cinzel', serif; font-size: 16px; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--gold-dim); text-align: center;
+}
+.cs-abilities-row {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%;
+}
+.cs-ability-block {
+  flex: 1; min-width: 80px; max-width: 130px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 14px 8px 10px;
+  background: linear-gradient(160deg, #1c1410, #110d0a);
+  border: 1px solid var(--panel-border);
+  transition: border-color 0.2s;
+}
+.cs-ability-block:hover { border-color: var(--gold-dim); }
+.cs-ability-icon  { font-size: 18px; line-height: 1; }
+.cs-ability-abbr  {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold-dim);
+}
+.cs-ability-score {
+  font-family: 'Cinzel Decorative', serif; font-size: 26px; font-weight: 900;
+  color: var(--gold); line-height: 1;
+}
+.cs-ability-mod { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; letter-spacing: 0.04em; }
+.cs-ability-mod.pos { color: var(--pos-green); }
+.cs-ability-mod.neg { color: var(--neg-red); }
+
+/* ── Tab zone ─────────────────────────────────────────────────────────────── */
+.cs-zone-tabs { display: flex; flex-direction: column; gap: 0; }
+
+/* Tab bar */
+.cs-tab-bar {
+  display: flex; border-bottom: 1px solid var(--gold-dim);
+  background: rgba(10,6,8,0.6);
+  overflow-x: auto; scrollbar-width: none;
+}
+.cs-tab-bar::-webkit-scrollbar { display: none; }
+.cs-tab {
+  display: flex; align-items: center; gap: 7px;
+  padding: 12px 20px; cursor: pointer; white-space: nowrap;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted);
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  margin-bottom: -1px;
+}
+.cs-tab:hover { color: var(--gold-dim); background: rgba(201,168,76,0.03); }
+.cs-tab.active {
+  color: var(--gold-light); border-bottom-color: var(--gold);
+  background: rgba(201,168,76,0.05);
+}
+.cs-tab-icon  { font-size: 16px; }
+.cs-tab-label { }
+
+/* Tab content wrapper */
+.cs-tab-content {
+  border: 1px solid var(--panel-border); border-top: none;
+  background: var(--panel-bg);
+  min-height: 300px;
+}
+
+/* Tab pane */
+.cs-tab-pane {
+  padding: 24px;
+  animation: csFadeUp 0.3s ease both;
+}
+.cs-tab-pane-two-col {
+  display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start;
+}
+
+/* ── Shared pane components ───────────────────────────────────────────────── */
+.cs-info-section       { margin-bottom: 24px; }
+.cs-info-section:last-child { margin-bottom: 0; }
+.cs-info-section-title {
+  font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold);
+  padding-bottom: 8px; border-bottom: 1px solid var(--panel-border);
+  margin-bottom: 12px;
+}
+
+.cs-prose {
+  font-family: 'Crimson Text', serif; font-size: 17px; color: var(--text-muted);
+  font-style: italic; line-height: 1.65; margin: 0;
+}
+
+.cs-empty-note {
+  font-family: 'Crimson Text', serif; font-size: 17px;
+  color: var(--text-muted); font-style: italic;
+}
+
+/* Equipment cards */
+.cs-equip-card {
+  border: 1px solid var(--panel-border);
+  background: linear-gradient(160deg, #1a1510, #110d0a);
+  padding: 16px;
+  margin-bottom: 4px;
+}
+.cs-equip-card-top {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 10px;
+}
+.cs-equip-big-icon  { font-size: 32px; line-height: 1; flex-shrink: 0; }
+.cs-equip-card-name {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--gold);
+  font-weight: 600; letter-spacing: 0.04em;
+}
+.cs-equip-card-cat  {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.12em; margin-top: 3px;
+}
+.cs-equip-card-dice {
+  margin-left: auto; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 14px; border: 1px solid var(--panel-border);
+  background: rgba(0,0,0,0.3); flex-shrink: 0;
+}
+.cs-dice-val  {
+  font-family: 'Cinzel Decorative', serif; font-size: 22px; font-weight: 900;
+  color: var(--crimson-lit); line-height: 1;
+}
+.cs-dice-type {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted);
+}
+.cs-shield-chip {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--steel);
+  margin-left: 8px;
+}
+.cs-ac-formula {
+  font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold-dim);
+  letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.cs-equip-desc {
+  font-family: 'Crimson Text', serif; font-size: 17px; color: var(--text-muted);
+  font-style: italic; line-height: 1.5;
+}
+.cs-equip-props { display: flex; flex-wrap: wrap; gap: 5px; }
+.cs-prop-tag {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--text-muted);
+  border: 1px solid var(--panel-border); padding: 2px 7px;
+}
+
+/* Skills list */
+.cs-skill-list { display: flex; flex-direction: column; gap: 1px; }
+.cs-skill-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 6px;
+  transition: background 0.15s;
+}
+.cs-skill-row:hover { background: rgba(201,168,76,0.05); }
+.cs-skill-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid var(--gold-dim); background: transparent;
+}
+.cs-skill-dot.filled  { background: var(--gold); border-color: var(--gold); }
+.cs-skill-dot.exp-dot { background: var(--gold-light); border-color: var(--gold-light); box-shadow: 0 0 5px rgba(232,204,122,0.5); }
+.cs-skill-name {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--text-body);
+  letter-spacing: 0.02em; flex: 1; min-width: 0;
+}
+.cs-skill-row.prof .cs-skill-name { color: var(--gold); }
+.cs-skill-row.exp  .cs-skill-name { color: var(--gold-light); }
+.cs-skill-ability {
+  font-family: 'Cinzel', serif; font-size: 16px; color: var(--text-muted);
+  letter-spacing: 0.08em; width: 28px; text-align: center; flex-shrink: 0;
+}
+.cs-skill-bonus {
+  font-family: 'Cinzel', serif; font-size: 16px; font-weight: 600;
+  letter-spacing: 0.04em; width: 30px; text-align: right; flex-shrink: 0;
+}
+.cs-skill-bonus.pos { color: var(--pos-green); }
+.cs-skill-bonus.neg { color: var(--neg-red); }
+
+/* Passive perception block */
+.cs-passive-block {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 14px; border: 1px solid var(--panel-border);
+  background: rgba(201,168,76,0.04);
+}
+.cs-passive-val   {
+  font-family: 'Cinzel Decorative', serif; font-size: 28px; font-weight: 900;
+  color: var(--gold-light); line-height: 1;
+}
+.cs-passive-label {
+  font-family: 'Cinzel', serif; font-size: 16px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* Features list */
+.cs-features-list { display: flex; flex-direction: column; gap: 2px; }
+.cs-feature-card {
+  padding: 12px 14px;
+  border-left: 2px solid var(--gold-dim);
+  background: rgba(201,168,76,0.025);
+  margin-bottom: 6px;
+  position: relative;
+}
+.cs-feature-card:last-child { margin-bottom: 0; }
+.cs-feature-card-badge {
+  font-family: 'Cinzel', serif; font-size: 16px; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--crimson-lit);
+  margin-bottom: 4px;
+}
+.cs-feature-card-name {
+  font-family: 'Cinzel', serif; font-size: 17px; color: var(--gold);
+  font-weight: 600; letter-spacing: 0.04em; margin-bottom: 5px;
+}
+.cs-feature-card-desc {
+  font-family: 'Crimson Text', serif; font-size: 16px; color: var(--text-muted);
+  font-style: italic; line-height: 1.6;
+}
+.cs-feature-choice { border-left-color: var(--crimson-lit); }
+
+/* Tags */
+.cs-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cs-tag {
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.07em;
+  padding: 4px 10px; border: 1px solid var(--panel-border);
+}
+.cs-tag.gold      { color: var(--gold);       border-color: var(--gold-dim);  background: rgba(201,168,76,0.06); }
+.cs-tag.steel     { color: var(--steel);      border-color: var(--steel-dim); background: rgba(168,192,208,0.05); }
+.cs-tag.expertise { color: var(--gold-light); border-color: var(--gold);      background: rgba(201,168,76,0.12); }
+
+/* Proficiency sections */
+.cs-prof-section { margin-bottom: 22px; }
+.cs-prof-section:last-child { margin-bottom: 0; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .cs-main { padding: 68px 12px 90px; gap: 18px; }
+  .cs-zone-top { flex-direction: column; align-items: center; }
+  .cs-portrait-drop { width: 160px; height: 200px; }
+  .cs-identity-col { width: 100%; }
+  .cs-identity-grid { grid-template-columns: repeat(2, 1fr); }
+  .cs-abilities-row { gap: 6px; }
+  .cs-ability-block { min-width: 70px; padding: 10px 6px 8px; }
+  .cs-ability-score { font-size: 22px; }
+  .cs-combat-strip  { flex-wrap: wrap; }
+  .cs-combat-stat   { min-width: 45%; }
+  .cs-tab-pane-two-col { grid-template-columns: 1fr; gap: 24px; }
+  .cs-tab { padding: 10px 13px; font-size: 16px; }
+  .cs-tab-label { display: none; }
+  .cs-tab-icon  { font-size: 16px; }
+  .cs-tab-pane  { padding: 16px; }
+}
+
+/* ── Save badge & new character ── */
+.cs-eyebrow-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.cs-header-right {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+}
+.cs-save-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #7ec87e;
+  border: 1px solid rgba(126,200,126,0.3); padding: 3px 10px;
+  background: rgba(126,200,126,0.05);
+}
+.cs-save-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #7ec87e;
+  box-shadow: 0 0 6px rgba(126,200,126,0.7);
+  animation: csPulse 2.5s ease infinite;
+}
+@keyframes csPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.cs-new-char-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold-dim);
+  background: rgba(201,168,76,0.04); border: 1px solid var(--gold-dim);
+  padding: 6px 14px; cursor: pointer;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+}
+.cs-new-char-btn:hover {
+  color: var(--crimson-lit); border-color: var(--crimson-lit);
+  background: rgba(192,57,43,0.07);
+}
+
+/* ── Eldritch Invocation feature card ── */
+.cs-feature-invocation {
+  border-left-color: #c4a0f0;
+}
+.cs-feature-invocation .cs-feature-card-name {
+  color: #c4a0f0;
+}
+
+/* ── Spell slots section ─────────────────────────────────────────────────── */
+.cs-spell-section {
+  border-top: 1px solid rgba(160, 100, 220, 0.2);
+  padding-top: 20px;
+  margin-top: 4px;
+}
+
+.cs-spell-meta {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
+}
+.cs-spell-meta-item {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 8px 14px;
+  border: 1px solid var(--panel-border);
+  background: rgba(160,100,220,0.04);
+  min-width: 80px;
+}
+.cs-spell-meta-label {
+  font-family: 'Cinzel', serif; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--gold-dim);
+}
+.cs-spell-meta-value {
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 600;
+  color: #c4a0f0; letter-spacing: 0.04em;
+}
+
+.cs-spell-slots-label {
+  font-family: 'Cinzel', serif; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--gold-dim); margin-bottom: 12px;
+}
+
+.cs-spell-slots-row {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px;
+}
+.cs-spell-slot-group {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid rgba(160,100,220,0.3);
+  background: rgba(160,100,220,0.05);
+  min-width: 120px;
+}
+.cs-slot-level-label {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+  color: #c4a0f0; letter-spacing: 0.06em;
+}
+.cs-slot-pips {
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+}
+.cs-slot-pip {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d8b8ff, #8040c0);
+  border: 1px solid rgba(160,100,220,0.6);
+  box-shadow: 0 0 8px rgba(160,100,220,0.4);
+  display: inline-block; flex-shrink: 0;
+}
+.cs-slot-count {
+  font-family: 'Cinzel Decorative', serif; font-size: 18px; font-weight: 900;
+  color: #c4a0f0; line-height: 1; margin-left: 4px;
+}
+
+.cs-spell-note {
+  font-family: 'Crimson Text', serif; font-size: 14px; font-style: italic;
+  color: var(--text-muted); line-height: 1.5;
+  border-left: 2px solid rgba(160,100,220,0.3);
+  padding-left: 10px; margin-top: 6px;
+}
+
+/* ── Level Up button ── */
+.cs-levelup-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 22px; cursor: pointer;
+  background: linear-gradient(135deg, rgba(196,160,240,0.1), rgba(139,26,26,0.15));
+  border: 1px solid var(--violet-dim, #7a50b0);
+  font-family: 'Cinzel Decorative', serif; font-size: 14px; font-weight: 700;
+  color: #c4a0f0; letter-spacing: 0.06em;
+  transition: all 0.2s; align-self: flex-start;
+}
+.cs-levelup-btn:hover {
+  background: linear-gradient(135deg, rgba(196,160,240,0.18), rgba(139,26,26,0.25));
+  border-color: #c4a0f0;
+  box-shadow: 0 0 18px rgba(196,160,240,0.25);
+}
+.cs-max-level {
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-dim);
+  padding: 8px 16px; background: rgba(201,168,76,0.05);
+}
+
+/* ── Level-up feature card accents ── */
+.cs-feature-metamagic { border-left-color: #a0c0f0; }
+.cs-feature-metamagic .cs-feature-card-name { color: #a0c0f0; }
+.cs-feature-feat      { border-left-color: #f0c080; }
+.cs-feature-feat      .cs-feature-card-name { color: #f0c080; }
+.cs-feature-epic      { border-left-color: var(--gold-light); box-shadow: 0 0 10px rgba(232,204,122,0.1); }
+.cs-feature-epic      .cs-feature-card-name { color: var(--gold-light); }
+.cs-feature-epic      .cs-feature-card-badge { color: var(--gold); }

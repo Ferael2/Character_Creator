@@ -1,0 +1,157 @@
+import { useState, useEffect } from 'react'
+import './RaceSelectPage.css'
+
+const RACES = [
+  {
+    name: 'Human',
+    icon: '👤',
+    image: 'https://placehold.co/280x160/1c1510/c9a84c?text=Human&font=cinzel',
+    description: 'Versatile and ambitious, humans are the most widespread race in the realm — driven by boundless potential and an unyielding will to shape the world.',
+  },
+  {
+    name: 'Elf',
+    icon: '🌿',
+    image: 'https://placehold.co/280x160/0d1a10/c9a84c?text=Elf&font=cinzel',
+    description: 'Graceful and ancient, elves walk the land with centuries of wisdom. Their keen senses and arcane affinity make them formidable in forest and tower alike.',
+  },
+  {
+    name: 'Dwarf',
+    icon: '⛏️',
+    image: 'https://placehold.co/280x160/1a1008/c9a84c?text=Dwarf&font=cinzel',
+    description: 'Stout and unyielding as the mountains they call home, dwarves possess unmatched endurance, a fierce loyalty to kin, and mastery of stone and steel.',
+  },
+  {
+    name: 'Halfling',
+    icon: '🍀',
+    image: 'https://placehold.co/280x160/181510/c9a84c?text=Halfling&font=cinzel',
+    description: 'Small in stature but enormous in luck and cheer, halflings slip through danger with uncanny fortune and a warm heart that disarms even the coldest foe.',
+  },
+  {
+    name: 'Dragonborn',
+    icon: '🐉',
+    image: 'https://placehold.co/280x160/1a0a08/c9a84c?text=Dragonborn&font=cinzel',
+    description: 'Born of draconic blood, Dragonborn carry the proud legacy of dragons in every scale. Their breath weapon and fierce honour make them legendary warriors.',
+  },
+  {
+    name: 'Tiefling',
+    icon: '😈',
+    image: 'https://placehold.co/280x160/120810/c9a84c?text=Tiefling&font=cinzel',
+    description: 'Touched by infernal heritage, tieflings bear horns and a burning gaze that unnerves the fearful. Yet their inner resolve can forge a destiny entirely their own.',
+  },
+  {
+    name: 'Gnome',
+    icon: '⚙️',
+    image: 'https://placehold.co/280x160/0a1018/c9a84c?text=Gnome&font=cinzel',
+    description: 'Brimming with curiosity and invention, gnomes see the world as an endless puzzle to solve. Their cleverness and illusion magic make them unpredictable allies.',
+  },
+  {
+    name: "Half-Orc",
+    icon: '🗡️',
+    image: 'https://placehold.co/280x160/101810/c9a84c?text=Half-Orc&font=cinzel',
+    description: 'Forged between two worlds, half-orcs channel raw orcish fury through a sharpened human mind. Few can match their ferocity or their stubborn refusal to fall.',
+  },
+]
+
+const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ']
+
+export default function RaceSelectPage({ onSelect }) {
+  const [visible, setVisible] = useState(false)
+  const [selected, setSelected] = useState(null)
+
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 80)
+  }, [])
+
+  const handleSelect = (race) => {
+    setSelected(race.name)
+    setTimeout(() => {
+      if (onSelect) onSelect(race)
+    }, 600)
+  }
+
+  return (
+    <div className={`race-root ${visible ? 'visible' : ''}`}>
+
+      {/* Rune borders */}
+      <div className="rune-border top">
+        {RUNES.map((r, i) => (
+          <span key={i} className="rune" style={{ animationDelay: `${i * 0.15}s` }}>{r}</span>
+        ))}
+      </div>
+      <div className="rune-border bottom">
+        {[...RUNES].reverse().map((r, i) => (
+          <span key={i} className="rune" style={{ animationDelay: `${i * 0.15}s` }}>{r}</span>
+        ))}
+      </div>
+
+      {/* Floating particles */}
+      <div className="particles" aria-hidden="true">
+        {Array.from({ length: 14 }).map((_, i) => (
+          <span key={i} className="particle" style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 6}s`,
+            animationDuration: `${7 + Math.random() * 8}s`,
+            fontSize: `${8 + Math.random() * 9}px`,
+          }}>
+            {RUNES[Math.floor(Math.random() * RUNES.length)]}
+          </span>
+        ))}
+      </div>
+
+      {/* Corner ornaments */}
+      <div className="corner tl" aria-hidden="true">✦</div>
+      <div className="corner tr" aria-hidden="true">✦</div>
+      <div className="corner bl" aria-hidden="true">✦</div>
+      <div className="corner br" aria-hidden="true">✦</div>
+
+      <main className="race-main">
+        <header className="race-header">
+          <p className="eyebrow">Character Creation — Step I</p>
+          <h1 className="race-title">Choose Your <span className="accent">Race</span></h1>
+          <p className="race-subtitle">Your lineage shapes your body, your gifts, and the world's first impression of you.</p>
+        </header>
+
+        <div className="cards-grid" role="list">
+          {RACES.map((race, i) => (
+            <button
+              key={race.name}
+              className={`race-card ${selected === race.name ? 'chosen' : ''}`}
+              onClick={() => handleSelect(race)}
+              role="listitem"
+              aria-label={`Choose ${race.name}`}
+              style={{ animationDelay: `${i * 0.07}s` }}
+            >
+              {/* Image section */}
+              <div className="card-image-wrap">
+                <img
+                  src={race.image}
+                  alt={race.name}
+                  className="card-image"
+                  loading="lazy"
+                />
+                <div className="card-image-overlay" aria-hidden="true" />
+                <span className="card-icon" aria-hidden="true">{race.icon}</span>
+              </div>
+
+              {/* Title section */}
+              <div className="card-title-row">
+                <h2 className="card-title">{race.name}</h2>
+                <span className="card-select-mark" aria-hidden="true">✦</span>
+              </div>
+
+              {/* Description section */}
+              <p className="card-desc">{race.description}</p>
+
+              {/* Bottom ornament line */}
+              <div className="card-footer" aria-hidden="true">
+                <span className="card-footer-line" />
+                <span className="card-footer-rune">ᛟ</span>
+                <span className="card-footer-line" />
+              </div>
+            </button>
+          ))}
+        </div>
+      </main>
+    </div>
+  )
+}

@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+  --steel:       #a8c0d0;
+  --steel-dim:   #3a5060;
+}
+
+/* ── Root ── */
+.eq-root {
+  position: relative; min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,   rgba(139,26,26,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(201,168,76,0.07) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px);
+  display: flex; flex-direction: column; align-items: center;
+  overflow-x: hidden; opacity: 0; transition: opacity 0.7s ease;
+}
+.eq-root.visible { opacity: 1; }
+
+/* ── Rune chrome ── */
+.eq-rune-border {
+  position: absolute; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 4px;
+  padding: 10px 16px; overflow: hidden; z-index: 2;
+}
+.eq-rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); }
+.eq-rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); }
+.eq-rune {
+  font-family: serif; font-size: 17px; color: var(--gold-dim);
+  opacity: 0; animation: eqRuneAppear 0.4s forwards; user-select: none;
+}
+@keyframes eqRuneAppear { to { opacity: 0.7; } }
+
+.eq-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.eq-particle {
+  position: absolute; bottom: -20px; color: var(--gold); opacity: 0;
+  animation: eqFloatUp linear infinite;
+}
+@keyframes eqFloatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.25; } 90% { opacity: 0.12; }
+  100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+}
+
+.eq-corner {
+  position: absolute; font-size: 18px; color: var(--gold); z-index: 3;
+  animation: eqRuneAppear 1s ease both;
+}
+.eq-corner.tl { top: 16px;  left: 20px;  }
+.eq-corner.tr { top: 16px;  right: 20px; }
+.eq-corner.bl { bottom: 16px; left: 20px;  }
+.eq-corner.br { bottom: 16px; right: 20px; }
+
+/* ── Main layout ── */
+.eq-main {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 960px;
+  padding: 80px 24px 120px;
+  display: flex; flex-direction: column; gap: 48px;
+}
+
+/* ── Header ── */
+.eq-header {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; text-align: center;
+}
+.eq-eyebrow {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--gold-dim); margin: 0;
+}
+.eq-title {
+  font-family: 'Cinzel Decorative', serif; font-size: clamp(24px, 5vw, 40px);
+  font-weight: 900; color: var(--gold-light); margin: 0;
+  text-shadow: 0 0 40px rgba(201,168,76,0.4);
+}
+.eq-accent { color: var(--crimson-lit); }
+
+.eq-selections-reminder {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  align-items: center; gap: 6px; margin-top: 4px;
+}
+.eq-sel-item {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.1em;
+  color: var(--gold-dim); background: rgba(201,168,76,0.06);
+  border: 1px solid var(--gold-dim); padding: 3px 12px;
+}
+.eq-sel-sep { color: var(--gold-dim); font-size: 11px; }
+
+.eq-subtitle {
+  font-family: 'Crimson Text', serif; font-size: 16px; color: var(--text-muted);
+  line-height: 1.6; max-width: 560px; margin: 4px 0 0; font-style: italic;
+}
+
+.eq-class-note {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--gold-dim); padding: 8px 18px;
+  background: rgba(201,168,76,0.04);
+  font-family: 'Cinzel', serif; font-size: 17px;
+  color: var(--text-muted); letter-spacing: 0.05em;
+  max-width: 600px; text-align: center; line-height: 1.5;
+}
+.eq-note-icon { font-size: 16px; flex-shrink: 0; }
+
+/* ── Section ── */
+.eq-section {
+  display: flex; flex-direction: column; gap: 18px;
+  animation: fadeInUp 0.5s ease both;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.eq-section:nth-child(2) { animation-delay: 0.1s; }
+.eq-section:nth-child(3) { animation-delay: 0.2s; }
+
+.eq-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  border-bottom: 1px solid var(--gold-dim); padding-bottom: 10px;
+}
+.eq-section-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Cinzel Decorative', serif; font-size: 18px;
+  color: var(--gold); margin: 0; font-weight: 700; letter-spacing: 0.05em;
+}
+.eq-section-icon { font-size: 20px; }
+
+/* ── AC Summary ── */
+.eq-ac-summary, .eq-weap-summary {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-family: 'Cinzel', serif; font-size: 16px;
+  background: rgba(201,168,76,0.06); border: 1px solid var(--gold-dim);
+  padding: 6px 14px; letter-spacing: 0.04em;
+}
+.acs-label {
+  color: var(--gold-dim); text-transform: uppercase; font-size: 16px; letter-spacing: 0.12em;
+}
+.acs-part  { color: var(--text-body); }
+.acs-op    { color: var(--gold-dim); }
+.acs-base  { color: var(--gold); font-weight: 600; }
+.acs-total {
+  color: var(--gold-light); font-family: 'Cinzel Decorative', serif;
+  font-size: 18px; font-weight: 900; line-height: 1;
+}
+
+/* ── Filter tabs ── */
+.eq-filter-tabs {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.eq-filter-tab {
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 5px 14px;
+  background: rgba(201,168,76,0.04); border: 1px solid var(--gold-dim);
+  color: var(--gold-dim); cursor: pointer; transition: all 0.18s;
+}
+.eq-filter-tab:hover { color: var(--gold); border-color: rgba(201,168,76,0.5); }
+.eq-filter-tab.active {
+  background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold-light);
+}
+
+/* ── Card grid ── */
+.eq-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+/* ── Base card ── */
+.eq-card {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 18px 12px 14px;
+  background: linear-gradient(160deg, #1c1410 0%, #110d0a 100%);
+  border: 1px solid var(--gold-dim);
+  cursor: pointer; transition: all 0.2s;
+  text-align: center;
+}
+.eq-card:hover {
+  border-color: rgba(201,168,76,0.55);
+  background: rgba(201,168,76,0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.eq-card.selected {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.1);
+  box-shadow: 0 0 18px rgba(201,168,76,0.2), inset 0 0 20px rgba(201,168,76,0.05);
+}
+
+.eq-selected-mark {
+  position: absolute; top: 0; right: 0;
+  background: var(--gold); color: #0e0a04;
+  font-size: 17px; font-weight: 900; font-family: 'Cinzel', serif;
+  padding: 2px 7px; line-height: 1.4;
+}
+
+.eq-card-icon { font-size: 26px; line-height: 1; }
+.eq-card-name {
+  font-family: 'Cinzel', serif; font-size: 16px; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.04em; line-height: 1.2;
+}
+.eq-card-sub {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold-dim);
+}
+
+.eq-card-desc {
+  font-family: 'Crimson Text', serif; font-size: 16px; color: var(--text-muted);
+  font-style: italic; line-height: 1.4; margin-top: 4px;
+}
+
+/* ── Armor AC display ── */
+.eq-ac-display {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 14px; background: rgba(0,0,0,0.3);
+  border: 1px solid var(--gold-dim); margin: 2px 0;
+}
+.eq-ac-num {
+  font-family: 'Cinzel Decorative', serif; font-size: 26px; font-weight: 900;
+  color: var(--gold-light); line-height: 1;
+}
+.eq-ac-label {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--gold-dim);
+}
+.shield-bonus .eq-ac-num { color: var(--steel); }
+.shield-card { border-style: dashed; }
+.shield-card.selected { border-style: solid; border-color: var(--steel); background: rgba(168,192,208,0.06); }
+.shield-card.selected .eq-selected-mark { background: var(--steel); }
+
+/* ── Weapon damage display ── */
+.eq-damage-display {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 14px; background: rgba(0,0,0,0.3);
+  border: 1px solid var(--gold-dim); margin: 2px 0; min-width: 80px;
+}
+.eq-damage-dice {
+  font-family: 'Cinzel Decorative', serif; font-size: 22px; font-weight: 900;
+  color: var(--crimson-lit); line-height: 1;
+}
+.eq-damage-type {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.eq-props {
+  display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 2px;
+}
+.eq-prop-tag {
+  font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gold-dim);
+  border: 1px solid rgba(122,94,37,0.4); padding: 2px 6px;
+  background: rgba(201,168,76,0.03);
+}
+
+/* ── Weapon summary ── */
+.eq-weap-summary { gap: 10px; }
+.eq-weap-summary .eq-damage-dice {
+  font-family: 'Cinzel Decorative', serif; font-size: 16px;
+  font-weight: 900; color: var(--crimson-lit); line-height: 1;
+}
+
+/* ── Final confirm area ── */
+.eq-confirm-area {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding-bottom: 32px;
+  animation: fadeInUp 0.5s 0.3s ease both;
+}
+
+.eq-final-summary {
+  display: flex; align-items: center; gap: 0;
+  border: 1px solid var(--gold-dim);
+  background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(0,0,0,0.2));
+  flex-wrap: wrap; justify-content: center;
+}
+.eq-final-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 16px 24px;
+}
+.eq-final-label {
+  font-family: 'Cinzel', serif; font-size: 17px; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--gold-dim);
+}
+.eq-final-value {
+  font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.eq-final-ac {
+  font-family: 'Cinzel Decorative', serif; font-size: 28px; font-weight: 900;
+  color: var(--gold-light); line-height: 1;
+}
+.eq-final-divider {
+  width: 1px; align-self: stretch; background: var(--gold-dim); opacity: 0.5;
+}
+
+/* ── Confirm button ── */
+.eq-confirm-btn {
+  padding: 0; background: none; border: none; cursor: pointer; outline: none;
+}
+.eq-confirm-inner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--crimson), #6b1010);
+  border: 1px solid rgba(201,168,76,0.3);
+  font-family: 'Cinzel Decorative', serif; font-size: 16px; font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.06em;
+  transition: all 0.2s;
+}
+.eq-confirm-btn.ready .eq-confirm-inner:hover {
+  background: linear-gradient(135deg, var(--crimson-lit), var(--crimson));
+  box-shadow: 0 0 20px rgba(139,26,26,0.5);
+}
+.eq-confirm-btn.dim .eq-confirm-inner {
+  background: linear-gradient(135deg, #2a1f10, #1a1208);
+  border-color: var(--gold-dim); color: var(--gold-dim); cursor: not-allowed;
+}
+.eq-confirm-hex { font-size: 16px; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .eq-main { padding: 72px 14px 100px; gap: 36px; }
+  .eq-card-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .eq-card { padding: 14px 10px 12px; }
+  .eq-section-header { flex-direction: column; align-items: flex-start; }
+  .eq-final-summary { width: 100%; }
+  .eq-ac-summary, .eq-weap-summary { font-size: 17px; }
+}
+
+/* ── Shield / two-handed restriction ── */
+.eq-shield-warning {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.08em;
+  color: var(--steel); border: 1px solid var(--steel-dim);
+  background: rgba(168,192,208,0.05); padding: 8px 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.eq-card-disabled {
+  opacity: 0.28; cursor: not-allowed; pointer-events: none;
+  filter: grayscale(40%);
+}

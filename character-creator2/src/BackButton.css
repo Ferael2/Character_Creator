@@ -1,0 +1,41 @@
+.global-back-btn {
+  position: fixed;
+  top: 46px;
+  left: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 6, 8, 0.82);
+  border: 1px solid #7a5e25;
+  padding: 6px 14px 6px 10px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, color 0.18s;
+  backdrop-filter: blur(4px);
+}
+
+.global-back-btn:hover {
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.global-back-arrow {
+  font-family: serif;
+  font-size: 20px;
+  color: #c9a84c;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+.global-back-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #7a5e25;
+  transition: color 0.18s;
+}
+
+.global-back-btn:hover .global-back-label {
+  color: #c9a84c;
+}

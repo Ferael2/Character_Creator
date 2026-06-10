@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8cc7a;
+  --gold-dim:    #7a5e25;
+  --crimson:     #8b1a1a;
+  --crimson-lit: #c0392b;
+  --deep:        #0a0608;
+  --text-body:   #c4a87a;
+  --text-muted:  #7a6040;
+}
+
+/* ── Root ── */
+.prof-root {
+  position: relative; min-height: 100svh;
+  background-color: var(--deep);
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,   rgba(139,26,26,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(201,168,76,0.07) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.025) 39px, rgba(201,168,76,0.025) 40px);
+  display: flex; flex-direction: column; align-items: center;
+  overflow-x: hidden; opacity: 0; transition: opacity 0.7s ease;
+}
+.prof-root.visible { opacity: 1; }
+
+/* ── Chrome ── */
+.prof-root .rune-border {
+  position: absolute; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 4px;
+  padding: 10px 16px; overflow: hidden; z-index: 2;
+}
+.prof-root .rune-border.top    { top: 0;    border-bottom: 1px solid var(--gold-dim); }
+.prof-root .rune-border.bottom { bottom: 0; border-top:    1px solid var(--gold-dim); }
+.prof-root .rune {
+  font-family: serif; font-size: 17px; color: var(--gold-dim);
+  opacity: 0; animation: runeAppear 0.4s forwards; user-select: none;
+}
+@keyframes runeAppear { to { opacity: 0.7; } }
+
+.prof-root .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.prof-root .particle {
+  position: absolute; bottom: -20px; color: var(--gold); opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.25; } 90% { opacity: 0.12; }
+  100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+}
+
+.prof-root .corner { position: absolute; font-size: 20px; color: var(--gold-dim); z-index: 3; opacity: 0.7; }
+.prof-root .corner.tl { top: 32px;    left:  32px; }
+.prof-root .corner.tr { top: 32px;    right: 32px; }
+.prof-root .corner.bl { bottom: 32px; left:  32px; }
+.prof-root .corner.br { bottom: 32px; right: 32px; }
+
+/* ── Main ── */
+.prof-main {
+  position: relative; z-index: 5;
+  width: 100%; max-width: 1100px;
+  padding: 72px 24px 88px;
+  display: flex; flex-direction: column; align-items: center; gap: 36px;
+}
+
+/* ── Header ── */
+.prof-header { text-align: center; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.prof-root .eyebrow {
+  font-family: 'Cinzel', serif; font-size: 17px;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dim);
+}
+.prof-title {
+  font-family: 'Cinzel Decorative', serif; font-weight: 900;
+  font-size: clamp(26px, 4.5vw, 48px); color: var(--text-body); line-height: 1.1;
+}
+.prof-title .accent { color: var(--gold); text-shadow: 0 0 40px rgba(201,168,76,0.35); }
+
+.selections-reminder {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; flex-wrap: wrap;
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.1em; color: var(--gold-dim);
+}
+.sel-item { color: var(--gold); }
+.sel-sep  { font-size: 13px; }
+
+.prof-subtitle {
+  font-family: 'Crimson Text', serif; font-size: 18px; font-style: italic;
+  color: var(--text-muted); max-width: 560px; margin: 0 auto; line-height: 1.6;
+}
+.prof-subtitle strong { color: var(--gold-light); font-style: normal; font-weight: 600; }
+
+/* ── Layout ── */
+.prof-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  width: 100%;
+  align-items: start;
+}
+
+/* ── Panel titles ── */
+.panel-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel-title {
+  font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim);
+}
+.pick-counter {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.1em;
+  color: var(--text-muted); border: 1px solid var(--gold-dim);
+  padding: 3px 10px; transition: all 0.3s;
+}
+.pick-counter.done { color: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px rgba(201,168,76,0.2); }
+
+/* ── Skills grid ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.skill-card {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 12px 14px; text-align: left;
+  background: rgba(201,168,76,0.03); border: 1px solid var(--gold-dim);
+  cursor: pointer; transition: all 0.2s ease;
+  position: relative; overflow: hidden;
+}
+.skill-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08), transparent 70%);
+  opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.skill-card:hover:not(.from-bg):not(.blocked)::before { opacity: 1; }
+.skill-card:hover:not(.from-bg):not(.blocked) {
+  border-color: var(--gold); box-shadow: 0 0 12px rgba(201,168,76,0.15);
+}
+
+/* States */
+.skill-card.picked {
+  background: rgba(201,168,76,0.1); border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(201,168,76,0.2);
+}
+.skill-card.from-bg {
+  background: rgba(139,26,26,0.1); border-color: rgba(139,26,26,0.5);
+  cursor: not-allowed; opacity: 0.85;
+}
+.skill-card.blocked {
+  opacity: 0.35; cursor: not-allowed;
+}
+
+.skill-card-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.skill-name {
+  font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700;
+  color: var(--gold-light); letter-spacing: 0.05em;
+}
+.skill-badge {
+  font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: 0.08em;
+  color: var(--gold-dim); white-space: nowrap;
+}
+.skill-card.picked  .skill-badge { color: var(--gold); }
+.skill-card.from-bg .skill-badge { color: var(--crimson-lit); }
+
+.skill-desc {
+  font-family: 'Crimson Text', serif; font-size: 17px;
+  line-height: 1.5; color: var(--text-muted);
+}
+
+/* ── Summary panel ── */
+.summary-panel {
+  background: linear-gradient(160deg, #1c1410 0%, #110d0a 100%);
+  border: 1px solid var(--gold-dim);
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 16px;
+  position: sticky; top: 24px;
+}
+
+.summary-section { display: flex; flex-direction: column; gap: 10px; }
+.summary-section-title {
+  font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dim);
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.section-icon { color: var(--gold); }
+.section-sub  { color: var(--text-muted); font-size: 13px; font-weight: 400; }
+
+.summary-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.summary-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Crimson Text', serif; font-size: 17px; line-height: 1;
+}
+.summary-item.locked { color: var(--crimson-lit); }
+.summary-item.chosen { color: var(--gold-light); }
+.item-dot { font-size: 11px; color: var(--gold-dim); flex-shrink: 0; }
+.summary-empty {
+  font-family: 'Crimson Text', serif; font-style: italic;
+  font-size: 17px; color: var(--text-muted); opacity: 0.6;
+}
+
+.summary-divider {
+  display: flex; align-items: center; gap: 8px;
+}
+.divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); }
+.divider-diamond { font-size: 11px; color: var(--gold-dim); opacity: 0.7; }
+
+/* ── Confirm button ── */
+.confirm-btn {
+  padding: 0; background: none; border: none; cursor: pointer; outline: none; width: 100%;
+}
+.confirm-btn:disabled { cursor: not-allowed; }
+.confirm-btn-inner {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 13px 20px; width: 100%;
+  background: linear-gradient(135deg, #2a1f10 0%, #1a1208 100%);
+  border: 1px solid var(--gold-dim); color: var(--text-muted);
+  font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease;
+}
+.confirm-btn.ready .confirm-btn-inner {
+  background: linear-gradient(135deg, var(--crimson) 0%, #6b1010 100%);
+  border-color: var(--gold); color: var(--gold-light);
+}
+.confirm-btn.ready:hover .confirm-btn-inner {
+  background: linear-gradient(135deg, var(--crimson-lit) 0%, var(--crimson) 100%);
+  color: #fff; box-shadow: 0 0 24px rgba(139,26,26,0.5);
+}
+.confirm-btn.confirmed .confirm-btn-inner { opacity: 0.4; }
+.confirm-icon { font-size: 18px; }
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .prof-layout { grid-template-columns: 1fr; }
+  .summary-panel { position: static; }
+  .prof-main { padding: 72px 16px 88px; gap: 28px; }
+  .skills-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+/* ── Skills column (left side wrapper) ── */
+.skills-column { display: flex; flex-direction: column; gap: 40px; }
+
+/* ── Skills section (class / skilled / expertise) ── */
+.skills-section { display: flex; flex-direction: column; gap: 14px; }
+
+.panel-title-sub {
+  font-weight: 400; font-size: 18px; color: var(--text-muted);
+  letter-spacing: 0.08em; text-transform: none; margin-left: 6px;
+}
+
+.section-note {
+  font-family: 'Crimson Text', serif; font-style: italic;
+  font-size: 18px; line-height: 1.55; color: var(--text-muted);
+}
+.section-note strong { color: var(--gold-light); font-style: normal; }
+
+/* ── Expertise section accent ── */
+.expertise-section { border-top: 1px solid rgba(155,114,207,0.3); padding-top: 24px; }
+.expertise-title { color: #c4a0f0 !important; }
+
+/* ── Expertise card state ── */
+.skill-card.expertise-picked {
+  background: rgba(80,40,120,0.2); border-color: #9b72cf;
+  box-shadow: 0 0 16px rgba(155,114,207,0.25);
+}
+.skill-card.expertise-picked .skill-badge { color: #c4a0f0; }
+.skill-card.expertise-picked:hover { border-color: #c4a0f0; }
+
+/* ── Summary item colours ── */
+.summary-item.skilled   { color: var(--gold-light); }
+.summary-item.expertise { color: #c4a0f0; }
+
+/* ── Fighting Style section ── */
+.fighting-style-section {
+  border-top: 1px solid rgba(201,168,76,0.3);
+  padding-top: 24px;
+}
+.fighting-style-title { color: var(--gold-light) !important; }
+
+.fighting-styles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.fighting-style-card {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 12px 14px; text-align: left;
+  background: rgba(201,168,76,0.03); border: 1px solid var(--gold-dim);
+  cursor: pointer; transition: all 0.2s ease;
+  position: relative; overflow: hidden;
+}
+.fighting-style-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08), transparent 70%);
+  opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.fighting-style-card:hover::before { opacity: 1; }
+.fighting-style-card:hover {
+  border-color: var(--gold); box-shadow: 0 0 12px rgba(201,168,76,0.15);
+}
+.fighting-style-card.picked {
+  background: rgba(201,168,76,0.1); border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(201,168,76,0.2);
+}
+
+/* ── Fighting Style summary item ── */
+.summary-item.fighting-style { color: var(--gold-light); }
+
+/* ── Divine Order section (Cleric) ── */
+.divine-order-section {
+  border-top: 1px solid rgba(220, 200, 120, 0.3);
+  padding-top: 24px;
+}
+.divine-order-title { color: #e8d48a !important; }
+
+.divine-order-card.picked {
+  background: rgba(220, 200, 80, 0.1);
+  border-color: #d4b84a;
+  box-shadow: 0 0 16px rgba(220, 200, 80, 0.2);
+}
+
+.summary-item.divine-order { color: #e8d48a; }
+
+/* ── Primal Order section (Druid) ── */
+.primal-order-section {
+  border-top: 1px solid rgba(80, 160, 80, 0.3);
+  padding-top: 24px;
+}
+.primal-order-title { color: #7ec87e !important; }
+
+.primal-order-card.picked {
+  background: rgba(60, 140, 60, 0.12);
+  border-color: #5aaa5a;
+  box-shadow: 0 0 16px rgba(80, 160, 80, 0.2);
+}
+
+.summary-item.primal-order { color: #7ec87e; }
+
+/* ── Eldritch Invocations section ── */
+.invocation-section {
+  border-top: 1px solid rgba(160, 100, 220, 0.25);
+  padding-top: 28px;
+}
+.invocation-title { color: #c4a0f0 !important; }
+
+.invocation-card.picked {
+  border-color: #c4a0f0 !important;
+  background: rgba(160, 100, 220, 0.08) !important;
+  box-shadow: 0 0 18px rgba(160, 100, 220, 0.18) !important;
+}
+.invocation-card.picked .skill-name { color: #c4a0f0; }
+.invocation-card.picked .skill-badge { color: #c4a0f0; }
+.invocation-card::before {
+  background: radial-gradient(ellipse at top, rgba(160,100,220,0.08), transparent 70%) !important;
+}
+
+.summary-item.invocation { color: #c4a0f0; }
