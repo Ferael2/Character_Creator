@@ -10,6 +10,129 @@ const fmtMod = (m) => m >= 0 ? `+${m}` : `${m}`
 
 // ── Choice-type renderers ─────────────────────────────────────────────────────
 
+const SUBCLASS_DESCRIPTIONS = {
+  // ── Barbarian ──────────────────────────────────────────────────────────────
+  'Path of the Berserker':    'A path of unrelenting rage. You can enter a Frenzy while raging, making a bonus attack each turn. Higher levels grant immunity to being charmed or frightened while raging, and you can turn failed saves against fear or charm into successes.',
+  'Path of the Totem Warrior':'Bond with a spirit animal that shapes your rage. Choose Bear for resistance to all damage, Eagle to move past enemies freely, or Wolf to help allies land attacks. Later totems deepen these bonds with powerful passive boons.',
+  'Path of the Wild Heart':   'Your rage channels the primal spirit of a beast. You gain a bestial spirit at 3rd level granting special movement or senses, and additional creature powers as you grow stronger. Nature itself answers your fury.',
+  'Path of the World Tree':   'Draw power from the great cosmic tree Yggdrasil. Your rage lets you teleport along its roots, protect allies from harm, and ultimately travel across planes. You become a living conduit between worlds.',
+  'Path of the Zealot':       'Divine power fuels your rage. You deal extra radiant or necrotic damage on your first hit each rage, can fight on past death\'s threshold, and allies can resurrect you for free. Gods themselves keep you in the fight.',
+
+  // ── Bard ───────────────────────────────────────────────────────────────────
+  'College of Dance':         'Express magic through movement. Your footwork grants you Bardic Inspiration that powers nimble dodges, and you can use your reaction to deflect attacks. At higher levels your dances inspire extraordinary feats in allies.',
+  'College of Glamour':       'Wield the beguiling magic of the Feywild. You can weave Bardic Inspiration into a mantle of majesty, charm crowds, and teleport allies with whispered words. Your presence is impossible to ignore or disobey.',
+  'College of Lore':          'Master secrets from every tradition. You gain three extra skill proficiencies and Cutting Words — a reaction that subtracts a Bardic Inspiration die from an enemy\'s roll. Later you steal spells from any class list.',
+  'College of Valor':         'A skald who fights alongside the songs you sing. You gain medium armor, shields, and martial weapons. Extra Attack arrives at 6th level, and your Bardic Inspiration can be used to boost attack rolls or AC.',
+  'College of Swords':        'Combine blade and song into fluid combat artistry. Your Bardic Inspiration fuels Blade Flourishes — bonus damage plus parrying, dashing, or knocking foes away. Extra Attack at 6th level makes you a relentless duelist.',
+  'College of Whispers':      'A shadow behind every smile. You can steal a creature\'s identity after killing it, use Bardic Inspiration to deal psychic damage, and eventually learn to terrify enemies with dark whispers only they can hear.',
+
+  // ── Cleric ─────────────────────────────────────────────────────────────────
+  'Life Domain':              'The patron of healers. Your healing spells restore extra HP equal to 2 + spell level. Channel Divinity restores massive HP and extends to multiple targets. At higher levels you cast healing spells on downed allies as a bonus action.',
+  'Light Domain':             'Wield radiance and holy fire. You can blind attackers with a warding flare reaction, create pillars of light with Channel Divinity, and eventually summon a sphere of searing radiance that burns enemies each turn.',
+  'Trickery Domain':          'A god of mischief empowers you. Create illusions of yourself, grant invisibility, and duplicate yourself into a semi-real copy. Your Channel Divinity lets you or an ally reroll any roll — a divine second chance.',
+  'War Domain':   'God of battle walks with you. War Priest grants bonus weapon attacks as a bonus action. Channel Divinity adds +10 to a single attack roll, and later you gain Extra Attack and aura-like bonuses to allies\' attacks.',
+  'Knowledge Domain':         'Omniscience is your gift. You learn languages and skills from enemies, and Channel Divinity lets you become temporarily proficient in any skill or tool. Eventually you peer into minds and absorb their memories.',
+  'Nature Domain':            'Nature\'s warden. You learn druid cantrips and gain Heavy Armor. Channel Divinity charms animals and plants, and later you deal extra damage to elementals and fey while resisting their attacks.',
+  'Tempest Domain':           'Storm and sea obey you. Wrath of the Storm deals lightning or thunder damage as a reaction when hit. Channel Divinity maximizes thunder/lightning damage, and at higher levels you fly and call down devastating strikes.',
+  'Death Domain':             'Necrotic mastery. Your necromancy spells affect extra targets, and your touch delivers devastating necrotic energy. Channel Divinity auto-fails a Constitution save, and eventually your touch can drop foes to 0 HP.',
+  'Arcana Domain':            'Magic itself is your domain. You prepare Wizard spells and restore spell slots via Channel Divinity. Eventually you can dispel magical effects on allies and cast portent-like protections.',
+  'Forge Domain':             'Craft and creation as divine power. You gain free magical armor, and Channel Divinity lets you imbue a weapon or armor with a +1 bonus. At 8th level your weapon attacks deal extra fire damage and your forge soul resists it.',
+  'Grave Domain':             'Balance life and death. You can stabilize allies from 60 ft away, and Channel Divinity negates the next damage that would kill a creature. Your spells deal extra damage to undead while protecting the living.',
+  'Order Domain':             'Enforce divine law. Channel Divinity compels a creature to obey one command without a save. Allies who cast spells can make you attack as a reaction, and later you can Dominate Person as a Channel Divinity effect.',
+  'Peace Domain':             'A bond of harmony. You and chosen allies share a divine connection granting advantage on checks and saves when near each other. Channel Divinity deals psychic damage to attackers who strike your bonded allies.',
+
+  // ── Druid ──────────────────────────────────────────────────────────────────
+  'Circle of the Land':       'Tie your magic to a chosen terrain — Arctic, Coast, Desert, Forest, Grassland, Mountain, Swamp, or Underdark. You regain a spell slot on a short rest, ignore difficult terrain, and gain extra spells matching your land.',
+  'Circle of the Moon':       'A shapeshifter of immense power. You can Wild Shape into CR 1 beasts at level 2 (CR scales up). Combat Wild Shape lets you transform as a bonus action and spend spell slots to heal while shifted. At 10th level you become elementals.',
+  'Circle of the Sea':        'Command water and storm. While Wild Shaped you gain a swim speed, and your spells can push enemies with crashing waves. Stormy waters surround you in battle, slowing and damaging those who approach.',
+  'Circle of the Stars':      'Constellations guide your power. Your Starry Form (no Wild Shape needed) grants bonus healing, radiant bolts, or concentration protection depending on the constellation chosen. Eventually you can split into twin starry forms.',
+  'Circle of Wildfire':       'Destruction and renewal. You summon a Wildfire Spirit that teleports allies and burns enemies. Your fire spells deal bonus fire damage, and your spirit can revive fallen allies wrapped in revitalizing flames.',
+  'Circle of Spores':         'Life through decay. You deal bonus necrotic damage with cantrips and can animate corpses as zombie-like defenders. Your Halo of Spores poisons creatures who move near you, and your Wild Shape becomes a spore-infused undead form.',
+
+  // ── Fighter ────────────────────────────────────────────────────────────────
+  'Battle Master':            'Tactical superiority through maneuvers. You learn combat techniques like Disarming Strike, Feinting Attack, and Goading Attack powered by Superiority Dice. More dice and maneuvers unlock at higher levels, making you the battlefield\'s master strategist.',
+  'Champion':                 'Pure martial excellence. Your critical hit range expands to 19–20 at level 3, then 18–20 later. You gain an extra Fighting Style at 10th level and begin recovering abilities on short rests. Simple, powerful, devastatingly reliable.',
+  'Eldritch Knight':          'Steel and sorcery fused. You learn Wizard spells (primarily abjuration and evocation) and can bond a weapon to summon it instantly. War Magic lets you attack after a cantrip, and Arcane Charge teleports you when you Action Surge.',
+  'Arcane Archer':            'Infuse your arrows with magic. Choose two Arcane Shots (Banishing, Piercing, Seeking, etc.) that apply special effects on a hit. You regain uses on short rests and learn new shots as you level, becoming an arcane marksman.',
+  'Cavalier':                 'The unbreakable guardian on horseback. You can mark a target so they cannot attack others without penalty. Unwavering Mark lets you make bonus attacks against marked foes, and Ferocious Charger knocks enemies prone on a mounted charge.',
+  'Echo Knight':              'Shatter reality by summoning a duplicate from an alternate timeline. Your echo can attack in your place, let you teleport to its position, and even distract enemies. Manifest Echo transforms every turn into a flanking opportunity.',
+  'Psi Warrior':              'Telekinetic discipline empowers your strikes. You create a psionic shield that absorbs damage and can hurl enemies with your mind. Extra Attack synergizes with telekinetic movement, and eventually you project a psionic bubble around allies.',
+  'Rune Knight':              'Carve giant runes into your equipment. Each rune grants a passive effect and a powerful activated ability — Fire Rune for restraining, Cloud Rune for redirecting attacks, Storm Rune for advantage on Initiative. You grow to giant size at higher levels.',
+  'Samurai':                  'Indomitable resolve and fighting spirit. Fighting Spirit grants you advantage on all attacks and temporary HP for a turn. Elegant Courtier adds Wisdom to Persuasion. At 15th level, dropping to 0 HP triggers a final surge of three immediate attacks.',
+
+  // ── Monk ───────────────────────────────────────────────────────────────────
+  'Way of the Astral Self':   'Project your true self as an astral form. Arms of the Astral Self replace your fists with radiant force strikes that use Wisdom, and the Visage grants darkvision and advantage on Insight/Intimidation. Eventually your full astral form emerges, towering over foes.',
+  'Way of the Drunken Master':'Unpredictable, fluid combat mastery. Drunken Technique grants Disengage and bonus movement with Flurry of Blows. Tipsy Sway makes enemies miss and stumble into each other. You redirect attacks and become nearly impossible to pin down.',
+  'Way of the Four Elements': 'Wield the primal forces of earth, fire, water, and air. Spend ki to cast elemental disciplines — Wall of Fire, Water Whip, Breath of Winter, and more. A versatile spellcasting path powered entirely by ki points.',
+  'Way of the Kensei':        'Your chosen weapons are an extension of your soul. Kensei weapons benefit from your Martial Arts die and gain bonus damage. You can deflect ranged attacks and eventually fire magic arrows from any ranged Kensei weapon.',
+  'Way of the Long Death':    'Master the border between life and death. Touch of Death steals temporary HP from creatures you kill. Hour of Reaping frightens all nearby enemies. At 17th level, Mastery of Death lets you spend 1 ki to negate death outright.',
+  'Way of the Mercy':         'Heal and harm with the same hands. Hands of Healing cure HP with Flurry of Blows, while Hands of Harm deliver stunning necrotic damage. Physician\'s Touch upgrades both, and Flurries of Mercy can apply both effects in a single action.',
+  'Way of the Open Hand':     'The purist martial tradition. Open Hand Technique adds knock-prone, push, or prevent-reaction effects to Flurry of Blows at no extra cost. Wholeness of Body heals you, Tranquility gives you Sanctuary aura, and Quivering Palm can instantly kill.',
+  'Way of the Shadow':        'Become the darkness itself. Shadow Arts lets you cast darkness, silence, and pass without trace using ki. Shadow Step teleports between shadows as a bonus action. At 17th level you drag enemies into the Shadowfell itself.',
+  'Way of the Sun Soul':      'Channel inner light into radiant power. Radiant Sun Bolt gives you a ranged ki-powered attack. Searing Arc Strike unleashes a burning hands cone. Searing Sunburst fires a nuclear-bright explosion, and Sun Shield radiates blinding light on demand.',
+
+  // ── Paladin ────────────────────────────────────────────────────────────────
+  'Oath of Devotion':         'The archetype of the holy warrior. Sacred Weapon charges your blade with holy energy; Holy Nimbus wraps you in sunlight that damages fiends and undead. Your aura protects allies from enchantment and grants advantage vs. fiends.',
+  'Oath of the Ancients':     'Nature\'s paladin, preserving light and life. Nature\'s Wrath entangles enemies, and your aura grants resistance to spell damage from fiends and fey. At 20th level you transform into an avatar of nature, growing large and gaining legendary resistances.',
+  'Oath of Vengeance':        'Relentless hunter of the wicked. Vow of Enmity grants advantage against a single target. Avenging Angel lets you fly and frighten. Your spells emphasize control and pursuit — Hold Person, Misty Step, Banishment.',
+  'Oath of Conquest':         'Rule through fear. Conquering Presence frightens enemies in an aura; Guided Strike grants +10 to a hit. Aura of Conquest immobilizes frightened creatures near you, and at 20th level you exude an overwhelming aura of dread.',
+  'Oath of Glory':            'A champion who elevates others. Inspiring Smite transfers Smite damage as temporary HP to allies. Your aura grants a bonus to Athletics and Acrobatics. Glorious Defense lets you use your Charisma modifier to add AC to an ally as a reaction.',
+  'Oath of Redemption':       'Convert rather than destroy. Emissary of Peace grants advantage on Persuasion. Rebuke the Violent punishes attackers with their own damage. At 20th level Emissary of Redemption makes enemies take radiant damage for every attack they land on you.',
+  'Oath of the Watchers':     'Guard the mortal realm from extraplanar threats. Channel Divinity alerts allies to hidden fiends, celestials, or aberrations, and grants advantage vs. their spells. Your aura gives allies advantage on saves against those creature types.',
+  'Oathbreaker':              'Power born from betrayal. Animate Dead is free; Control Undead channels your divinity to dominate undead. Aura of Hate gives nearby undead and fiends your Charisma bonus on attacks. At 20th level you become a dread champion of darkness.',
+
+  // ── Ranger ─────────────────────────────────────────────────────────────────
+  'Beast Master':             'Form a bond with a primal beast companion. Your companion fights alongside you, acting on your turn. At higher levels it can deliver your spells, gains an extra attack, and becomes tougher as your proficiency bonus grows.',
+  'Fey Wanderer':             'Touched by the Feywild\'s whimsy. Add Wisdom to Charisma checks, and deal bonus psychic damage once per turn. Misty Wanderer lets you cast Misty Step and bring allies along. Your Fey Reinforcements conjure dryads when needed.',
+  'Gloom Stalker':            'Predator of the dark. In darkness you are invisible to darkvision. First-round ambushes grant a bonus attack. Umbral Sight reads invisible creatures, and Iron Mind grants proficiency in Wisdom saves. Perfect for the first strike.',
+  'Hunter':                   'Adaptive predator. Choose from Colossus Slayer, Giant Killer, or Horde Breaker for extra damage. Defensive Tactics add escape or protection. At 11th level Whirlwind Attack or Volley lets you hit every creature in range simultaneously.',
+  'Monster Slayer':           'Expert at taking down powerful foes. Hunter\'s Sense reveals immunities and resistances; Slayer\'s Prey marks a foe for extra damage on your first hit. Magical Ambush imposes disadvantage on saves after you Hide. Slayer\'s Counter is a free attack when a marked foe fails a save.',
+  'Horizon Walker':           'Guardian of the planar boundaries. Detect Portal senses rift locations. Planar Warrior deals force damage instead of weapon damage. Ethereal Step grants a free Etherealness, and at 11th level you attack twice across planes simultaneously.',
+  'Swarmkeeper':              'Command a swarming mass of spirits. Gathered Swarm deals bonus damage on hits and can move foes or yourself. Writhing Tide grants fly speed, and Swarming Dispersal lets your swarm scatter to teleport you away from danger.',
+
+  // ── Rogue ──────────────────────────────────────────────────────────────────
+  'Arcane Trickster':         'Weave illusion and enchantment into your larceny. Learn Wizard spells with a focus on misdirection. Mage Hand Legerdemain steals and plants objects invisibly. Spell Thief eventually lets you steal a spell right out of a caster\'s hands.',
+  'Assassin':                 'Strike before they even know you\'re there. Assassinate grants automatic critical hits against surprised creatures and advantage against anyone who hasn\'t acted yet. Infiltration Expertise lets you perfectly assume a false identity.',
+  'Phantom':                  'Straddle the line between life and death. Whispers of the Dead lets you gain random skill proficiencies from nearby corpses. Tokens of the Departed store souls in trinkets granting advantage, and Ghost Walk lets you turn spectral.',
+  'Scout':                    'Master of terrain and advance raiding. Skirmisher lets you Dash as a reaction when an enemy ends its move near you. Superior Mobility adds 10 ft. to your speed, and Ambush Master grants advantage on Initiative and free advantage for allies.',
+  'Soulknife':                'Slice with blades of pure psychic force. Psychic Blades materialize from nothing, deal psychic damage, and vanish after the throw. Psi-Powered Leap adds a jump boost, Psychic Veil grants invisibility, and Rend Mind stuns on a failed save.',
+  'Swashbuckler':             'Dashing, death-defying melee acrobat. Fancy Footwork prevents opportunity attacks against you after every melee strike. Rakish Audacity adds Charisma to Initiative, and you can Sneak Attack a single target with no ally needed.',
+  'Thief':                    'The quintessential criminal. Fast Hands adds sleight-of-hand and item use to Cunning Action. Second-Story Work adds Dexterity to jump distance and climbing speed. Supreme Sneak gives advantage on Stealth when moving slowly.',
+
+  // ── Sorcerer ───────────────────────────────────────────────────────────────
+  'Aberrant Mind':            'Tentacled psionic power flows through you. Gain telepathy and learn Psionic Spells from the Warlock list. Telepathic Speech lets you link minds at will. Warped Being makes you resistant to damage from your own spells and hard to grapple.',
+  'Clockwork Soul':           'Order and precision channeled as magic. Restore Balance cancels advantage or disadvantage as a reaction. Bastion of Law absorbs damage as a magical ward using sorcery points. Trance of Order grants advantage on attacks and saves.',
+  'Draconic Bloodline':       'Draconic ancestry flows in your veins. Choose a dragon type for a bonus damage cantrip and resistance to that element. Your HP increases, scales emerge granting natural armor, and at 18th level you sprout wings and fly.',
+  'Divine Soul':              'A sorcerer touched by the divine. Access the full Cleric spell list in addition to your own. Favored by the Gods lets you add 2d4 to a failed save or attack. Empowered Healing enhances healing spells with rerolls, and Unearthly Recovery restores HP mid-combat.',
+  'Shadow Magic':             'Born of darkness and shadow. Eyes of the Dark grant 120 ft. darkvision and cast Darkness with sorcery points. Strength of the Grave negates a killing blow once per day. Hound of Ill Omen summons a shadow mastiff that hinders a target\'s saves.',
+  'Storm Sorcery':            'Thunder and lightning courses through you. Wind Speaker grants all weather-related spells. Tempestuous Magic lets you fly 10 ft. after casting a spell. Heart of the Storm deals lightning or thunder damage to nearby enemies whenever you cast those spells.',
+  'Wild Magic':               'Chaos is your birthright. Every spell risks a Wild Magic Surge — roll on a table of spectacular random effects. Tides of Chaos grants advantage once per rest, and Bend Luck lets you add or subtract 1d4 from any creature\'s roll.',
+
+  // ── Warlock ────────────────────────────────────────────────────────────────
+  'The Archfey':              'Pact with a lord of the Feywild. Fey Presence charms or frightens all nearby creatures. Misty Escape lets you turn invisible and teleport when taking damage. Beguiling Defenses make you immune to charm and turn it back on the charmer.',
+  'The Celestial':            'A heavenly patron grants healing power. Expanded spell list includes sacred flame and lesser restoration. Healing Light lets you heal allies using a pool of d6s. Radiant Soul adds Charisma to fire and radiant damage, and Searing Vengeance revives you from 0 HP in a burst of light.',
+  'The Fiend':                'Strike a deal with the Lower Planes. Dark One\'s Blessing grants temporary HP on every kill. Dark One\'s Own Luck adds 1d10 to any check or save. Fiendish Resilience grants resistance to a chosen damage type, and Hurl Through Hell teleports a foe to the planes briefly.',
+  'The Great Old One':        'An unknowable entity whispers to you. Telepathic Bond lets you silently communicate with creatures you can see. Entropic Ward gives you disadvantage on a hit against you, then advantage on your next attack. Thought Shield makes you immune to telepathic intrusion.',
+  'The Hexblade':             'Bond with a sentient weapon from the Shadowfell. Hexblade\'s Curse marks a foe for bonus damage, proficiency to hit, and life-steal on kill. Hex Warrior makes one weapon use Charisma for attacks. Accursed Specter raises a slain humanoid as your spectral servant.',
+  'The Undead':               'Undying power beyond death. Form of Dread transforms you, frightening enemies and preventing you from dropping to 0 HP once per turn. Grave Touched negates the need to eat or breathe and deals extra necrotic damage. Necrotic Husk makes you immune to one death per long rest.',
+  'The Undying':              'A pact with a deathless immortal. Among the Dead grants undead ignore you by default. Defy Death heals you when you stabilize or succeed a death save. Undying Nature lets you stop aging, eating, and breathing, and at 10th level you resist necrotic damage.',
+
+  // ── Wizard ─────────────────────────────────────────────────────────────────
+  'School of Abjuration':     'A fortress of magical wards. Arcane Ward creates a shield using spell slots that absorbs damage before it reaches you. Projected Ward extends that protection to allies. Improved Abjuration adds your proficiency bonus to counterspell and dispel magic checks.',
+  'School of Conjuration':    'Master of summoning and teleportation. Minor Conjuration creates small objects from nothing. Benign Transposition swaps your position with a summoned creature or a willing ally. Focused Conjuration makes concentration on conjuration spells impossible to break with damage.',
+  'School of Divination':     'See what others cannot. Portent grants two d20 rolls each long rest that can replace any roll in the game — before or after the dice fall. Expert Divination recovers spell slots when you cast divination spells.',
+  'School of Enchantment':    'Rewrite minds. Hypnotic Gaze dazes a creature within 5 ft as an action, renewing automatically each turn. Instinctive Charm redirects attacks against you to another creature. Split Enchantment applies single-target enchantment spells to two targets at once.',
+  'School of Evocation':      'Raw magical power, precisely delivered. Sculpt Spells automatically protects allies inside your area-of-effect spells. Potent Cantrip lets even successful saving throws suffer half damage. Empowered Evocation adds your Intelligence modifier to the damage of every Wizard evocation spell.',
+  'School of Illusion':       'Bend perception to your will. Improved Minor Illusion creates both sound and image with one casting. Malleable Illusions let you alter ongoing illusions as a bonus action. Illusory Self creates a perfect decoy that causes one attack to miss per short rest.',
+  'School of Necromancy':     'Life and death are yours to command. Grim Harvest restores HP each time you kill with a spell. Undead Thralls lets you animate more undead at once, adding your proficiency bonus to their damage. Command Undead permanently dominates a sentient undead creature.',
+  'School of Transmutation':  'Reshape matter and bodies. Transmutation Savant halves gold and time to copy transmutation spells. Minor Alchemy temporarily transforms materials. Transmuter\'s Stone grants a persistent bonus to a carried ally, and Shapechanger lets you cast polymorph on yourself for free.',
+  'Order of Scribes':         'Magic through the written word. Your spellbook awakens as a magical familiar. Awakened Spellbook lets you swap a spell\'s damage type freely and extend concentration without a slot. Manifest Mind projects your book\'s spirit to cast touch spells at range.',
+  'Bladesinging':             'Dance and magic as one art. Bladesong adds Intelligence to AC and speed, grants advantage on Acrobatics, and gives you a bonus to concentration saves. Extra Attack at 6th level, and Song of Defense absorbs damage by spending spell slots.',
+  'Chronurgy Magic':          'Bend time itself. Chronal Shift lets you force a reroll on any die result twice per long rest. Temporal Awareness adds Intelligence to Initiative. Momentary Stasis freezes a creature in time, and Convergent Future guarantees a specific outcome for any roll — at the cost of exhaustion.',
+  'Graviturgy Magic':         'Manipulate the forces of gravity. Adjust Density increases or decreases a creature\'s weight, granting resistance or reducing speed. Gravity Well moves creatures after every spell. Violent Attraction adds 1d10 to a weapon attack or falling damage, and Event Horizon repels creatures with massive force.',
+  'War Magic':                'Efficiency and durability under fire. Arcane Deflection lets you add +2 to AC or +4 to a saving throw as a reaction — but limits you to cantrips next turn. Tactical Wit adds Intelligence to Initiative. Power Surge stores charges from dispels to add bonus damage to a spell.',
+}
+
 function SubclassChoice({ choice, value, onChange }) {
   return (
     <div className="lu-choice-block">
@@ -24,6 +147,9 @@ function SubclassChoice({ choice, value, onChange }) {
           >
             {value === opt && <span className="lu-check">✓</span>}
             <span className="lu-option-name">{opt}</span>
+            {SUBCLASS_DESCRIPTIONS[opt] && (
+              <span className="lu-option-desc">{SUBCLASS_DESCRIPTIONS[opt]}</span>
+            )}
           </button>
         ))}
       </div>
