@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BackButton from './BackButton'
 import './AbilityScorePage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 
 const ABILITIES = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
 const ABILITY_ABBR = { Strength: 'STR', Dexterity: 'DEX', Constitution: 'CON', Intelligence: 'INT', Wisdom: 'WIS', Charisma: 'CHA' }
@@ -56,20 +58,22 @@ function Chrome({ race, background, cls }) {
 
 // ─── Method picker ────────────────────────────────────────────────────────────
 function MethodPicker({ onChoose }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   return (
     <div className="method-picker">
       <div className="method-card" onClick={() => onChoose('roll')}>
         <div className="method-icon">🎲</div>
-        <h2 className="method-name">Roll for Stats</h2>
+        <h2 className="method-name">{t.ability_methodRollTitle}</h2>
         <p className="method-desc">
-          Embrace fate. Roll 4d6 and drop the lowest die for each ability score — the classic way to forge your destiny with a throw of the dice.
+          {t.ability_methodRollDesc}
         </p>
         <div className="method-tags">
           <span className="method-tag">High variance</span>
           <span className="method-tag">Classic</span>
           <span className="method-tag">Exciting</span>
         </div>
-        <div className="method-cta">Choose ›</div>
+        <div className="method-cta">{t.ability_methodChoose}</div>
       </div>
 
       <div className="method-divider" aria-hidden="true">
@@ -80,16 +84,16 @@ function MethodPicker({ onChoose }) {
 
       <div className="method-card" onClick={() => onChoose('pointbuy')}>
         <div className="method-icon">⚖️</div>
-        <h2 className="method-name">Point Buy</h2>
+        <h2 className="method-name">{t.ability_methodPointTitle}</h2>
         <p className="method-desc">
-          Craft your character with precision. Spend 27 points to build your scores — every ability starts at 8 and can be raised up to 15.
+          {t.ability_methodPointDesc}
         </p>
         <div className="method-tags">
           <span className="method-tag">Balanced</span>
           <span className="method-tag">Tactical</span>
           <span className="method-tag">Controlled</span>
         </div>
-        <div className="method-cta">Choose ›</div>
+        <div className="method-cta">{t.ability_methodChoose}</div>
       </div>
     </div>
   )
@@ -97,6 +101,8 @@ function MethodPicker({ onChoose }) {
 
 // ─── Background bonus picker ──────────────────────────────────────────────────
 function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const eligibleStats = background?.abilityScores || ABILITIES
   const [bonusMode, setBonusMode] = useState(null) // null | 'spread' | 'focused'
   // spread: +1 to all eligible stats
@@ -129,7 +135,7 @@ function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
           <span className="bonus-bg-name">{background?.name}</span>
         </div>
         <p className="bonus-picker-subtitle">
-          Your background grants ability score bonuses. Choose how to distribute them.
+          {t.ability_bonusSubtitle}
         </p>
         <p className="bonus-eligible-label">
           Eligible abilities: {eligibleStats.map(s => ABILITY_ABBR[s]).join(', ')}
@@ -150,7 +156,7 @@ function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
                 <span key={s} className="bonus-pill">{ABILITY_ABBR[s]} +1</span>
               ))}
             </div>
-            <div className="method-cta">Choose ›</div>
+            <div className="method-cta">{t.ability_methodChoose}</div>
           </div>
 
           <div className="method-divider" aria-hidden="true">
@@ -169,7 +175,7 @@ function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
               <span className="bonus-pill bonus-pill-2">One stat +2</span>
               <span className="bonus-pill">One stat +1</span>
             </div>
-            <div className="method-cta">Choose ›</div>
+            <div className="method-cta">{t.ability_methodChoose}</div>
           </div>
         </div>
       )}
@@ -282,7 +288,7 @@ function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
           <button className="confirm-scores-btn" onClick={handleConfirm}>
             <span className="confirm-scores-inner">
               <span>⬡</span>
-              Confirm Final Scores
+              {t.ability_confirmFinal}
             </span>
           </button>
         </div>
@@ -293,6 +299,8 @@ function BackgroundBonusPicker({ background, baseScores, onConfirm }) {
 
 // ─── Rolling method ───────────────────────────────────────────────────────────
 function RollingMethod({ onConfirm }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const emptyScores = () => ABILITIES.map(() => null)
   const [rolls, setRolls]       = useState(emptyScores)
   const [rolling, setRolling]   = useState(false)
@@ -374,7 +382,7 @@ function RollingMethod({ onConfirm }) {
           >
             <span className="roll-btn-inner">
               <span className="roll-btn-icon">🎲</span>
-              {rolling ? 'Rolling…' : rolled ? `Reroll All` : 'Roll All'}
+              {rolling ? t.ability_rollingBtn : rolled ? t.ability_rerollBtn : t.ability_rollBtn}
             </span>
           </button>
           {rolled && (
@@ -402,6 +410,8 @@ function RollingMethod({ onConfirm }) {
 
 // ─── Point buy method ─────────────────────────────────────────────────────────
 function PointBuyMethod({ onConfirm }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [scores, setScores] = useState(
     Object.fromEntries(ABILITIES.map(a => [a, 8]))
   )
@@ -501,6 +511,8 @@ function PointBuyMethod({ onConfirm }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function AbilityScorePage({ race, background, cls, onConfirm, onBack }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible, setVisible]       = useState(false)
   const [method, setMethod]         = useState(null)   // null | 'roll' | 'pointbuy'
   const [baseScores, setBaseScores] = useState(null)   // null until method confirmed
@@ -541,8 +553,8 @@ export default function AbilityScorePage({ race, background, cls, onConfirm, onB
 
       <main className="as-main">
         <header className="as-header">
-          <p className="eyebrow">Character Creation — Step V</p>
-          <h1 className="as-title">Set Your <span className="accent">Ability Scores</span></h1>
+          <p className="eyebrow">{t.ability_eyebrow}</p>
+          <h1 className="as-title">{t.ability_title} <span className="accent">{t.ability_titleAccent}</span></h1>
           <div className="selections-reminder">
             {race       && <span className="sel-item">{race.icon} {race.name}</span>}
             {race       && background && <span className="sel-sep">◆</span>}

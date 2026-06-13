@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './CharacterSheetPage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 import { PROF_BY_LEVEL, SPELL_SLOTS_BY_CLASS_LEVEL, CANTRIPS_BY_CLASS_LEVEL, HIT_DIE_AVG } from './levelUpData.js'
 
 const ABILITIES = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma']
@@ -140,11 +142,11 @@ function SaveRow({ ability, abilityScores, proficient, profBonus }) {
 
 // ── Tab system ────────────────────────────────────────────────────────────────
 const TABS = [
-  { id: 'combat',      label: 'Combat',      icon: '⚔️' },
-  { id: 'skills',      label: 'Skills',      icon: '🎯' },
-  { id: 'features',    label: 'Features',    icon: '✨' },
-  { id: 'background',  label: 'Background',  icon: '📜' },
-  { id: 'proficiency', label: 'Proficiencies', icon: '🎓' },
+  { id: 'combat',      label: t.cs_tab_combat,      icon: '⚔️' },
+  { id: 'skills',      label: t.cs_tab_skills,      icon: '🎯' },
+  { id: 'features',    label: t.cs_tab_features,    icon: '✨' },
+  { id: 'background',  label: t.cs_tab_background,  icon: '📜' },
+  { id: 'proficiency', label: t.cs_tab_proficiency, icon: '🎓' },
 ]
 
 function TabBar({ active, onChange }) {
@@ -195,25 +197,25 @@ function SpellSlotsSection({ cls, level }) {
 
   return (
     <div className="cs-info-section cs-spell-section">
-      <div className="cs-info-section-title">✨ Spellcasting</div>
+      <div className="cs-info-section-title">✨ {t.cs_spellcasting.replace("✨ ","")}</div>
       <div className="cs-spell-meta">
         <div className="cs-spell-meta-item">
-          <span className="cs-spell-meta-label">Ability</span>
+          <span className="cs-spell-meta-label">{t.cs_spellAbility}</span>
           <span className="cs-spell-meta-value">{meta.ability}</span>
         </div>
         <div className="cs-spell-meta-item">
-          <span className="cs-spell-meta-label">Type</span>
+          <span className="cs-spell-meta-label">{t.cs_spellType}</span>
           <span className="cs-spell-meta-value">{meta.type}</span>
         </div>
         {cantrips > 0 && (
           <div className="cs-spell-meta-item">
-            <span className="cs-spell-meta-label">Cantrips</span>
+            <span className="cs-spell-meta-label">{t.cs_cantrips}</span>
             <span className="cs-spell-meta-value">{cantrips}</span>
           </div>
         )}
       </div>
 
-      <div className="cs-spell-slots-label">Spell Slots — Character Level {level}</div>
+      <div className="cs-spell-slots-label">{t.cs_spellSlots} {level}</div>
       {slotEntries.length > 0 ? (
         <div className="cs-spell-slots-row">
           {slotEntries.map(({ level: slotLvl, count }) => (
@@ -254,7 +256,7 @@ function CombatTab({ equipment, totalAC, cls, abilityScores, level }) {
     <div className="cs-tab-pane">
       {/* Weapon */}
       <div className="cs-info-section">
-        <div className="cs-info-section-title">Weapon</div>
+        <div className="cs-info-section-title">{t.cs_weapon}</div>
         {equipment?.weapon ? (
           <div className="cs-equip-card">
             <div className="cs-equip-card-top">
@@ -281,7 +283,7 @@ function CombatTab({ equipment, totalAC, cls, abilityScores, level }) {
 
       {/* Armor */}
       <div className="cs-info-section">
-        <div className="cs-info-section-title">Armor</div>
+        <div className="cs-info-section-title">{t.cs_armor}</div>
         {equipment?.armor ? (
           <div className="cs-equip-card">
             <div className="cs-equip-card-top">
@@ -313,7 +315,7 @@ function SkillsTab({ abilityScores, allProficientSkills, expertiseSkills, saving
   return (
     <div className="cs-tab-pane cs-tab-pane-two-col">
       <div>
-        <div className="cs-info-section-title" style={{ marginBottom: '10px' }}>Saving Throws</div>
+        <div className="cs-info-section-title" style={{ marginBottom: '10px' }}>{t.cs_savingThrows}</div>
         <div className="cs-skill-list">
           {ABILITIES.map(ability => (
             <SaveRow
@@ -323,17 +325,17 @@ function SkillsTab({ abilityScores, allProficientSkills, expertiseSkills, saving
           ))}
         </div>
 
-        <div className="cs-info-section-title" style={{ margin: '20px 0 10px' }}>Passive Perception</div>
+        <div className="cs-info-section-title" style={{ margin: '20px 0 10px' }}>{t.cs_passivePerception}</div>
         <div className="cs-passive-block">
           <span className="cs-passive-val">
             {10 + getMod(abilityScores?.Wisdom || 10) + (allProficientSkills.includes('Perception') ? profBonus : 0)}
           </span>
-          <span className="cs-passive-label">10 + Perception bonus</span>
+          <span className="cs-passive-label">{t.cs_passivePerceptionSub}</span>
         </div>
       </div>
 
       <div>
-        <div className="cs-info-section-title" style={{ marginBottom: '10px' }}>Skills</div>
+        <div className="cs-info-section-title" style={{ marginBottom: '10px' }}>{t.cs_skills}</div>
         <div className="cs-skill-list">
           {Object.keys(SKILL_ABILITY).sort().map(skill => (
             <SkillRow
@@ -420,7 +422,7 @@ function FeaturesTab({ cls, proficiencies, levelUpData, level }) {
 
   return (
     <div className="cs-tab-pane">
-      <div className="cs-info-section-title">{cls?.icon} {cls?.name} — Features (Level {level})</div>
+      <div className="cs-info-section-title">{cls?.icon} {cls?.name} — {t.cs_featuresTitle} {level})</div>
       <div className="cs-features-list">
         {/* Level 1 core features */}
         {cls?.coreTrait && (
@@ -526,7 +528,7 @@ function BackgroundTab({ race, background }) {
   return (
     <div className="cs-tab-pane">
       <div className="cs-info-section">
-        <div className="cs-info-section-title">{background?.icon} Background — {background?.name}</div>
+        <div className="cs-info-section-title">{background?.icon} {t.cs_backgroundTitle} — {background?.name}</div>
         <p className="cs-prose">{background?.description}</p>
 
         {background?.feat && (
@@ -537,7 +539,7 @@ function BackgroundTab({ race, background }) {
           </div>
         )}
 
-        <div className="cs-info-section-title" style={{ marginTop: '20px' }}>Skill Proficiencies</div>
+        <div className="cs-info-section-title" style={{ marginTop: '20px' }}>{t.cs_skillProficiencies}</div>
         <div className="cs-tag-row">
           {(background?.skillProficiencies || []).map(s => (
             <span key={s} className="cs-tag gold">{s}</span>
@@ -546,7 +548,7 @@ function BackgroundTab({ race, background }) {
       </div>
 
       <div className="cs-info-section" style={{ marginTop: '24px' }}>
-        <div className="cs-info-section-title">{race?.icon} Race Traits — {race?.name}</div>
+        <div className="cs-info-section-title">{race?.icon} {t.cs_racialTraits} — {race?.name}</div>
         <div className="cs-features-list">
           {race?.traits?.map(trait => (
             <div key={trait.name} className="cs-feature-card">
@@ -564,7 +566,7 @@ function ProficiencyTab({ cls, allProficientSkills, expertiseSkills, savingThrow
   return (
     <div className="cs-tab-pane">
       <div className="cs-prof-section">
-        <div className="cs-info-section-title">Skills</div>
+        <div className="cs-info-section-title">{t.cs_skills}</div>
         <div className="cs-tag-row">
           {allProficientSkills.length > 0
             ? allProficientSkills.map(s => (
@@ -577,13 +579,13 @@ function ProficiencyTab({ cls, allProficientSkills, expertiseSkills, savingThrow
         </div>
       </div>
       <div className="cs-prof-section">
-        <div className="cs-info-section-title">Saving Throws</div>
+        <div className="cs-info-section-title">{t.cs_profSavingThrows}</div>
         <div className="cs-tag-row">
           {savingThrows.map(s => <span key={s} className="cs-tag gold">{s}</span>)}
         </div>
       </div>
       <div className="cs-prof-section">
-        <div className="cs-info-section-title">Armor</div>
+        <div className="cs-info-section-title">{t.cs_profArmor}</div>
         <div className="cs-tag-row">
           {(ARMOR_PROF_MAP[cls?.name] || ['—']).map(a => (
             <span key={a} className="cs-tag steel">{a}</span>
@@ -591,7 +593,7 @@ function ProficiencyTab({ cls, allProficientSkills, expertiseSkills, savingThrow
         </div>
       </div>
       <div className="cs-prof-section">
-        <div className="cs-info-section-title">Weapons</div>
+        <div className="cs-info-section-title">{t.cs_profWeapons}</div>
         <div className="cs-tag-row">
           {(() => {
             const weapMap = {
@@ -620,6 +622,8 @@ function ProficiencyTab({ cls, allProficientSkills, expertiseSkills, savingThrow
 
 // ── Main page ──────────────────────────────────────────────────────────────────
 export default function CharacterSheetPage({ race, background, cls, proficiencies, abilityScores, equipment, charName, onCharNameChange, portrait, onPortraitChange, level, levelUpData, onLevelUp, onNewCharacter }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible,    setVisible]    = useState(false)
   const [dragging,   setDragging]   = useState(false)
   const [activeTab,  setActiveTab]  = useState('combat')
@@ -679,11 +683,11 @@ export default function CharacterSheetPage({ race, background, cls, proficiencie
       <main className="cs-main">
         {/* Eyebrow */}
         <header className="cs-eyebrow-row">
-          <p className="cs-eyebrow">Character Sheet</p>
+          <p className="cs-eyebrow">{t.cs_eyebrow}</p>
           <div className="cs-header-right">
-            <span className="cs-save-badge" title="Character saved to browser storage">
+            <span className="cs-save-badge" title={t.cs_saved}>
               <span className="cs-save-dot" />
-              Saved
+              {lang === 'es' ? 'Guardado' : 'Saved'}
             </span>
             <div className="cs-identity-badges">
               {race       && <span className="cs-badge">{race.icon} {race.name}</span>}
@@ -692,11 +696,11 @@ export default function CharacterSheetPage({ race, background, cls, proficiencie
             </div>
             {onNewCharacter && (
               <button className="cs-new-char-btn" onClick={() => {
-                if (window.confirm('Start a new character? Your current character will be deleted.')) {
+                if (window.confirm(lang==='es'?'¿Empezar un nuevo personaje? Tu personaje actual será eliminado.':'Start a new character? Your current character will be deleted.')) {
                   onNewCharacter()
                 }
               }}>
-                <span>⊕</span> New Character
+                <span>⊕</span> {t.cs_newCharacter}
               </button>
             )}
           </div>
@@ -718,12 +722,12 @@ export default function CharacterSheetPage({ race, background, cls, proficiencie
                 ? <img src={portrait} alt="Character portrait" className="cs-portrait-img" />
                 : <div className="cs-portrait-placeholder">
                     <div className="cs-portrait-rune">ᚹ</div>
-                    <p className="cs-portrait-hint">Click or drop<br/><span>to upload portrait</span></p>
+                    <p className="cs-portrait-hint">{lang==='es'?'Haz clic o suelta':'Click or drop'}<br/><span>{lang==='es'?'para subir retrato':'to upload portrait'}</span></p>
                   </div>
               }
               {portrait && (
                 <button className="cs-portrait-change" onClick={e=>{e.stopPropagation();fileRef.current?.click()}}>
-                  Change
+                  {t.cs_changePortrait}
                 </button>
               )}
             </div>
@@ -732,23 +736,23 @@ export default function CharacterSheetPage({ race, background, cls, proficiencie
 
           <div className="cs-identity-col">
             <div className="cs-name-wrap">
-              <label className="cs-name-label">Character Name</label>
+              <label className="cs-name-label">{t.cs_charName}</label>
               <input
                 className="cs-name-input" type="text" value={charName}
                 onChange={e=>onCharNameChange(e.target.value)}
-                placeholder="Enter your name…" maxLength={40}
+                placeholder={t.cs_namePlaceholder} maxLength={40}
               />
               <div className="cs-name-underline" />
             </div>
 
             <div className="cs-identity-grid">
               {[
-                ['Race',        `${race?.icon||''} ${race?.name||'—'}`],
-                ['Background',  `${background?.icon||''} ${background?.name||'—'}`],
-                ['Class',       `${cls?.icon||''} ${cls?.name||'—'}`],
-                ['Level',       String(level || 1)],
-                ['Hit Die',     hitDie],
-                ['Prof. Bonus', `+${profBonus}`],
+                [t.cs_race,     `${race?.icon||''} ${race?.name||'—'}`],
+                [t.cs_background, `${background?.icon||''} ${background?.name||'—'}`],
+                [t.cs_class,    `${cls?.icon||''} ${cls?.name||'—'}`],
+                [t.cs_level,    String(level || 1)],
+                [lang==='es'?'Dado de Golpe':'Hit Die', hitDie],
+                [lang==='es'?'Bon. Competencia':'Prof. Bonus', `+${profBonus}`],
               ].map(([label, value]) => (
                 <div key={label} className="cs-identity-cell">
                   <span className="cs-id-label">{label}</span>
@@ -760,17 +764,17 @@ export default function CharacterSheetPage({ race, background, cls, proficiencie
             {/* Level Up button */}
             {onLevelUp && level < 20 && (
               <button className="cs-levelup-btn" onClick={onLevelUp}>
-                <span>⬡</span> Level Up → {(level||1) + 1}
+                <span>⬡</span> {lang==="es"?"Subir Nivel →":"Level Up →"} {(level||1) + 1}
               </button>
             )}
-            {level >= 20 && <div className="cs-max-level">⬡ Maximum Level Reached</div>}
+            {level >= 20 && <div className="cs-max-level">{lang==='es'?'⬡ Nivel Máximo Alcanzado':'⬡ Maximum Level Reached'}</div>}
 
             <div className="cs-combat-strip">
               {[
-                { label: 'Armor Class',  value: totalAC,           sub: equipment?.armor?.name || 'Unarmored', cls: 'ac'    },
-                { label: 'Max HP',       value: maxHP,             sub: `${hitDie} + CON mod`,                cls: 'hp'    },
-                { label: 'Initiative',   value: fmtMod(dexMod),    sub: 'DEX modifier',                       cls: 'init'  },
-                { label: 'Speed',        value: race?.speed || 30, sub: 'feet per turn',                      cls: 'speed' },
+                { label: t.cs_ac,        value: totalAC,           sub: equipment?.armor?.name || (lang==='es'?'Sin armadura':'Unarmored'), cls: 'ac'    },
+                { label: t.cs_hp,        value: maxHP,             sub: `${hitDie} + ${t.cs_conMod}`,         cls: 'hp'    },
+                { label: t.cs_initiative, value: fmtMod(dexMod),   sub: t.cs_dexModifier,                     cls: 'init'  },
+                { label: t.cs_speed,     value: race?.speed || 30, sub: t.cs_feetPerTurn,                     cls: 'speed' },
               ].map((stat, i, arr) => (
                 <>
                   <div key={stat.label} className={`cs-combat-stat ${stat.cls}`}>

@@ -281,7 +281,7 @@
 @keyframes panelIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
 .class-description {
-  font-family: 'Crimson Text', serif; font-size: 17px;
+  font-family: 'Crimson Text', serif; font-size: 15px;
   line-height: 1.75; color: var(--text-muted);
 }
 

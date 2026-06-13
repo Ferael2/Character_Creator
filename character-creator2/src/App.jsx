@@ -8,6 +8,7 @@ import AbilityScorePage from './AbilityScorePage'
 import EquipmentSelectPage from './EquipmentSelectPage'
 import CharacterSheetPage from './CharacterSheetPage'
 import LevelUpPage from './LevelUpPage'
+import LanguageToggle from './LanguageToggle'
 import { CLASS_LEVEL_FEATURES, HIT_DIE_AVG, PROF_BY_LEVEL } from './levelUpData.js'
 import './App.css'
 
@@ -198,23 +199,23 @@ export default function App() {
   if (!saveLoaded) return null
 
   if (view === 'race-select')
-    return <RaceSelectPage onSelect={handleRaceSelect} onBack={goBack} />
+    return <><LanguageToggle /><RaceSelectPage onSelect={handleRaceSelect} onBack={goBack} /></>
   if (view === 'background-select')
-    return <BackgroundSelectPage race={selectedRace} onSelect={handleBackgroundSelect} onBack={goBack} />
+    return <><LanguageToggle /><BackgroundSelectPage race={selectedRace} onSelect={handleBackgroundSelect} onBack={goBack} /></>
   if (view === 'class-select')
-    return <ClassSelectPage race={selectedRace} background={selectedBackground} onSelect={handleClassSelect} onBack={goBack} />
+    return <><LanguageToggle /><ClassSelectPage race={selectedRace} background={selectedBackground} onSelect={handleClassSelect} onBack={goBack} /></>
   if (view === 'proficiency-select')
-    return <ProficiencySelectPage race={selectedRace} background={selectedBackground} cls={selectedClass} onConfirm={handleProficiencyConfirm} onBack={goBack} />
+    return <><LanguageToggle /><ProficiencySelectPage race={selectedRace} background={selectedBackground} cls={selectedClass} onConfirm={handleProficiencyConfirm} onBack={goBack} /></>
   if (view === 'ability-scores')
-    return <AbilityScorePage race={selectedRace} background={selectedBackground} cls={selectedClass} onConfirm={handleAbilityConfirm} onBack={goBack} />
+    return <><LanguageToggle /><AbilityScorePage race={selectedRace} background={selectedBackground} cls={selectedClass} onConfirm={handleAbilityConfirm} onBack={goBack} /></>
   if (view === 'equipment-select')
-    return <EquipmentSelectPage race={selectedRace} background={selectedBackground} cls={selectedClass} abilityScores={abilityScores} onConfirm={handleEquipmentConfirm} onBack={goBack} />
+    return <><LanguageToggle /><EquipmentSelectPage race={selectedRace} background={selectedBackground} cls={selectedClass} abilityScores={abilityScores} onConfirm={handleEquipmentConfirm} onBack={goBack} /></>
 
   if (view === 'level-up') {
     const newLevel  = level + 1
     const clsName   = selectedClass?.name
     const levelData = CLASS_LEVEL_FEATURES[clsName]?.[newLevel]
-    return <LevelUpPage
+    return <><LanguageToggle /><LevelUpPage
       cls={selectedClass} newLevel={newLevel}
       choices={levelData?.choices || []}
       abilityScores={abilityScores}
@@ -222,11 +223,11 @@ export default function App() {
       proficiencies={proficiencies}
       onConfirm={handleLevelUpConfirm}
       onBack={() => setView('character-sheet')}
-    />
+    /></>
   }
 
   if (view === 'character-sheet')
-    return <CharacterSheetPage
+    return <><LanguageToggle /><CharacterSheetPage
       race={selectedRace} background={selectedBackground} cls={selectedClass}
       proficiencies={proficiencies} abilityScores={abilityScores} equipment={equipment}
       charName={charName} onCharNameChange={setCharName}
@@ -234,7 +235,7 @@ export default function App() {
       level={level} levelUpData={levelUpData}
       onLevelUp={handleLevelUp}
       onNewCharacter={handleNewCharacter}
-    />
+    /></>
 
-  return <WelcomePage onBegin={handleBegin} />
+  return <><LanguageToggle /><WelcomePage onBegin={handleBegin} /></>
 }

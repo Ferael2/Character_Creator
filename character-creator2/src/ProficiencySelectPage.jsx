@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BackButton from './BackButton'
 import './ProficiencySelectPage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 
 const CLASS_PROFICIENCY_OPTIONS = {
   Barbarian: { count: 2, skills: ['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'] },
@@ -140,6 +142,8 @@ const ELDRITCH_INVOCATIONS = [
 ]
 
 export default function ProficiencySelectPage({ race, background, cls, onConfirm, onBack }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible,       setVisible]      = useState(false)
   const [selected,      setSelected]     = useState([])
   const [skilled,       setSkilled]      = useState([])
@@ -268,8 +272,8 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
       <main className="prof-main">
 
         <header className="prof-header">
-          <p className="eyebrow">Character Creation — Step IV</p>
-          <h1 className="prof-title">Choose Your <span className="accent">Proficiencies</span></h1>
+          <p className="eyebrow">{t.prof_eyebrow}</p>
+          <h1 className="prof-title">{t.prof_title} <span className="accent">{t.prof_titleAccent}</span></h1>
           <div className="selections-reminder">
             {race       && <span className="sel-item">{race.icon} {race.name}</span>}
             {race       && background && <span className="sel-sep">◆</span>}
@@ -285,7 +289,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
             {isCleric  && <> Then choose your <strong>Divine Order</strong>.</>}
             {isDruid   && <> Then choose your <strong>Primal Order</strong>.</>}
             {isWarlock && <> Then choose your first <strong>Eldritch Invocation</strong>.</>}
-            {' '}Skills from your background are locked in automatically.
+            {' '}{lang === 'es' ? 'Las habilidades de tu trasfondo se asignan automáticamente.' : 'Skills from your background are locked in automatically.'}
           </p>
         </header>
 
@@ -297,7 +301,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
             {/* Section 1 — Class skills */}
             <section className="skills-section">
               <div className="panel-title-row">
-                <h2 className="panel-title">Class Skills</h2>
+                <h2 className="panel-title">{t.prof_classSkills}</h2>
                 <span className={`pick-counter ${classPicksDone ? 'done' : ''}`}>
                   {selected.length} / {maxClassPicks} chosen
                 </span>
@@ -334,8 +338,8 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title">
-                    Skilled Feat
-                    <span className="panel-title-sub">— choose any 3 skills</span>
+                    {t.prof_skilledSkills}
+                    <span className="panel-title-sub">{t.prof_skilledSub}</span>
                   </h2>
                   <span className={`pick-counter ${skilledPicksDone ? 'done' : ''}`}>
                     {skilled.length} / {maxSkilledPicks} chosen
@@ -377,8 +381,8 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section expertise-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title expertise-title">
-                    ◈ Expertise
-                    <span className="panel-title-sub">— double your proficiency bonus</span>
+                    ◈ {t.prof_expertise}
+                    <span className="panel-title-sub">{t.prof_expertiseSub}</span>
                   </h2>
                   <span className={`pick-counter ${expertiseDone ? 'done' : ''}`}>
                     {expertise.length} / {EXPERTISE_COUNT} chosen
@@ -427,15 +431,15 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section fighting-style-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title fighting-style-title">
-                    ⚔ Fighting Style
-                    <span className="panel-title-sub">— choose one</span>
+                    ⚔ {t.prof_fightingStyle}
+                    <span className="panel-title-sub">{t.prof_fightingStyleSub}</span>
                   </h2>
                   <span className={`pick-counter ${fightingStyleDone ? 'done' : ''}`}>
                     {fightingStyleDone ? '1 / 1 chosen' : '0 / 1 chosen'}
                   </span>
                 </div>
                 <p className="section-note">
-                  Choose one <strong>Fighting Style</strong> that defines your martial specialty. You cannot take the same style more than once.
+                  {t.prof_fightingStyleDesc}
                 </p>
                 <div className="fighting-styles-grid">
                   {FIGHTING_STYLES.map(style => {
@@ -464,15 +468,15 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section divine-order-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title divine-order-title">
-                    ✝ Divine Order
-                    <span className="panel-title-sub">— choose one</span>
+                    ✝ {t.prof_divineOrder}
+                    <span className="panel-title-sub">{t.prof_divineOrderSub}</span>
                   </h2>
                   <span className={`pick-counter ${divineOrderDone ? 'done' : ''}`}>
                     {divineOrderDone ? '1 / 1 chosen' : '0 / 1 chosen'}
                   </span>
                 </div>
                 <p className="section-note">
-                  Choose the divine calling that shapes your role as a Cleric — whether you are a martial <strong>Protector</strong> or an arcane <strong>Thaumaturge</strong>.
+                  {t.prof_divineOrderDesc}
                 </p>
                 <div className="fighting-styles-grid">
                   {DIVINE_ORDERS.map(order => {
@@ -501,15 +505,15 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section primal-order-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title primal-order-title">
-                    🌿 Primal Order
-                    <span className="panel-title-sub">— choose one</span>
+                    🌿 {t.prof_primalOrder}
+                    <span className="panel-title-sub">{t.prof_primalOrderSub}</span>
                   </h2>
                   <span className={`pick-counter ${primalOrderDone ? 'done' : ''}`}>
                     {primalOrderDone ? '1 / 1 chosen' : '0 / 1 chosen'}
                   </span>
                 </div>
                 <p className="section-note">
-                  Choose the primal calling that defines your connection to nature — the arcane <strong>Magician</strong> or the martial <strong>Warden</strong>.
+                  {t.prof_primalOrderDesc}
                 </p>
                 <div className="fighting-styles-grid">
                   {PRIMAL_ORDERS.map(order => {
@@ -538,8 +542,8 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section invocation-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title invocation-title">
-                    📖 Warlock's Pact
-                    <span className="panel-title-sub">— choose one</span>
+                    📖 {t.prof_warlockPact}
+                    <span className="panel-title-sub">{t.prof_warlockPactSub}</span>
                   </h2>
                   <span className={`pick-counter ${pactDone ? 'done' : ''}`}>
                     {pactDone ? '1 / 1 chosen' : '0 / 1 chosen'}
@@ -578,8 +582,8 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <section className="skills-section invocation-section">
                 <div className="panel-title-row">
                   <h2 className="panel-title invocation-title">
-                    🔮 Eldritch Invocations
-                    <span className="panel-title-sub">— choose one</span>
+                    🔮 {t.prof_warlockInvocation}
+                    <span className="panel-title-sub">{t.prof_warlockInvocationSub}</span>
                   </h2>
                   <span className={`pick-counter ${invocationDone ? 'done' : ''}`}>
                     {invocationDone ? '1 / 1 chosen' : '0 / 1 chosen'}
@@ -615,12 +619,12 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
           {/* ── Right column — summary ── */}
           <div className="summary-panel">
 
-            <h2 className="panel-title">Your Proficiencies</h2>
+            <h2 className="panel-title">{t.prof_titleAccent}</h2>
 
             {/* Background */}
             <div className="summary-section">
               <h3 className="summary-section-title">
-                <span className="section-icon">⚑</span> Background
+                <span className="section-icon">⚑</span> {t.cs_background}
                 <span className="section-sub">({background?.name})</span>
               </h3>
               <ul className="summary-list">
@@ -655,7 +659,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">★</span> Skilled Feat
+                    <span className="section-icon">★</span> {t.prof_skilledSkills}
                   </h3>
                   <ul className="summary-list">
                     {skilled.map(s => <li key={s} className="summary-item skilled"><span className="item-dot">◆</span>{s}</li>)}
@@ -673,7 +677,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">◈</span> Expertise
+                    <span className="section-icon">◈</span> {t.prof_expertise}
                   </h3>
                   <ul className="summary-list">
                     {expertise.map(s => <li key={s} className="summary-item expertise"><span className="item-dot">◆</span>{s}</li>)}
@@ -691,7 +695,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">⚔</span> Fighting Style
+                    <span className="section-icon">⚔</span> {t.prof_fightingStyle}
                   </h3>
                   <ul className="summary-list">
                     {fightingStyle
@@ -711,7 +715,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">✝</span> Divine Order
+                    <span className="section-icon">✝</span> {t.prof_divineOrder}
                   </h3>
                   <ul className="summary-list">
                     {divineOrder
@@ -731,7 +735,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">🌿</span> Primal Order
+                    <span className="section-icon">🌿</span> {t.prof_primalOrder}
                   </h3>
                   <ul className="summary-list">
                     {primalOrder
@@ -751,7 +755,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">📖</span> Warlock's Pact
+                    <span className="section-icon">📖</span> {t.prof_warlockPact}
                   </h3>
                   <ul className="summary-list">
                     {warlockPact
@@ -765,7 +769,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                 </div>
                 <div className="summary-section">
                   <h3 className="summary-section-title">
-                    <span className="section-icon">🔮</span> Eldritch Invocation
+                    <span className="section-icon">🔮</span> {t.prof_warlockInvocation}
                   </h3>
                   <ul className="summary-list">
                     {eldritchInvocation
@@ -789,7 +793,7 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
               <span className="confirm-btn-inner">
                 <span className="confirm-icon">⬡</span>
                 {allDone
-                  ? 'Confirm Proficiencies'
+                  ? t.prof_confirmBtn
                   : !classPicksDone
                     ? `Choose ${maxClassPicks - selected.length} more skill${maxClassPicks - selected.length !== 1 ? 's' : ''}`
                     : !skilledPicksDone
@@ -797,14 +801,14 @@ export default function ProficiencySelectPage({ race, background, cls, onConfirm
                       : !expertiseDone
                         ? `Choose ${EXPERTISE_COUNT - expertise.length} more (Expertise)`
                         : !fightingStyleDone
-                          ? 'Choose a Fighting Style'
+                          ? (lang === 'es' ? 'Elige un Estilo de Combate' : 'Choose a Fighting Style')
                           : !divineOrderDone
-                            ? 'Choose a Divine Order'
+                            ? (lang === 'es' ? 'Elige una Orden Divina' : 'Choose a Divine Order')
                             : !primalOrderDone
-                              ? 'Choose a Primal Order'
+                              ? (lang === 'es' ? 'Elige una Orden Primigenia' : 'Choose a Primal Order')
                           : !invocationDone
-                              ? 'Choose an Eldritch Invocation'
-                              : 'Choose a Warlock Pact'
+                              ? (lang === 'es' ? 'Elige una Invocación' : 'Choose an Eldritch Invocation')
+                              : (lang === 'es' ? 'Elige un Don del Pacto' : 'Choose a Warlock Pact')
                 }
               </span>
             </button>

@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import './WelcomePage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 
 const RUNES = ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ', 'ᚱ', 'ᚲ', 'ᚷ', 'ᚹ', 'ᚺ', 'ᚾ', 'ᛁ', 'ᛃ', 'ᛇ', 'ᛈ', 'ᛉ', 'ᛊ', 'ᛏ', 'ᛒ', 'ᛖ', 'ᛗ', 'ᛚ', 'ᛜ', 'ᛞ', 'ᛟ']
 
 export default function WelcomePage({ onBegin }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible, setVisible] = useState(false)
   const [diceRolling, setDiceRolling] = useState(false)
 
@@ -56,30 +60,31 @@ export default function WelcomePage({ onBegin }) {
         </div>
 
         <div className="title-block">
-          <p className="eyebrow">Dungeons &amp; Dragons</p>
+          <p className="eyebrow">{t.welcome_eyebrow}</p>
           <h1 className="title">
-            <span className="title-line">Forge Your</span>
-            <span className="title-line accent">Legend</span>
+            <span className="title-line">{t.welcome_titleLine1}</span>
+            <span className="title-line accent">{t.welcome_titleLine2}</span>
           </h1>
           <p className="subtitle">
-            Every great adventure begins with a single choice.<br />
-            Choose your path. Shape your destiny.
+            {t.welcome_subtitle.split('\n').map((line, i) => (
+              <span key={i}>{line}{i === 0 && <br />}</span>
+            ))}
           </p>
         </div>
 
         <button
           className={`begin-btn ${diceRolling ? 'rolling' : ''}`}
           onClick={handleBegin}
-          aria-label="Begin your adventure"
+          aria-label={t.welcome_btn}
         >
           <span className="btn-inner">
             <span className="btn-d20" aria-hidden="true">⬡</span>
-            <span className="btn-text">Begin Your Adventure</span>
+            <span className="btn-text">{t.welcome_btn}</span>
           </span>
           <span className="btn-glow" aria-hidden="true" />
         </button>
 
-        <p className="fine-print">Roll for initiative. Your story awaits.</p>
+        <p className="fine-print">{t.welcome_finePrint}</p>
       </main>
 
       <div className="corner tl" aria-hidden="true">✦</div>

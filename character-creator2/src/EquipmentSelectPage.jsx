@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BackButton from './BackButton'
 import './EquipmentSelectPage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 
 // ─── Armor data ───────────────────────────────────────────────────────────────
 const ALL_ARMOR = [
@@ -286,6 +288,8 @@ function ACSummary({ armor, shield, dexMod, className }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function EquipmentSelectPage({ race, background, cls, abilityScores, onConfirm, onBack }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible, setVisible]         = useState(false)
   const [selectedArmor, setArmor]     = useState(null)
   const [selectedShield, setShield]   = useState(false)
@@ -349,15 +353,15 @@ export default function EquipmentSelectPage({ race, background, cls, abilityScor
       <main className="eq-main">
         {/* Header */}
         <header className="eq-header">
-          <p className="eq-eyebrow">Character Creation — Step VI</p>
-          <h1 className="eq-title">Choose Your <span className="eq-accent">Equipment</span></h1>
+          <p className="eq-eyebrow">{t.eq_eyebrow}</p>
+          <h1 className="eq-title">{t.eq_title} <span className="eq-accent">{t.eq_titleAccent}</span></h1>
           <div className="eq-selections-reminder">
             {race       && <span className="eq-sel-item">{race.icon} {race.name}</span>}
             {background && <><span className="eq-sel-sep">◆</span><span className="eq-sel-item">{background.icon} {background.name}</span></>}
             {cls        && <><span className="eq-sel-sep">◆</span><span className="eq-sel-item">{cls.icon} {cls.name}</span></>}
           </div>
           <p className="eq-subtitle">
-            Your starting equipment is limited to what your class training allows. Choose wisely — your survival depends on it.
+            {t.eq_subtitle}
           </p>
           <div className="eq-class-note">
             <span className="eq-note-icon">{cls?.icon}</span>
@@ -521,7 +525,7 @@ export default function EquipmentSelectPage({ race, background, cls, abilityScor
           >
             <span className="eq-confirm-inner">
               <span className="eq-confirm-hex">⬡</span>
-              {canConfirm ? 'Confirm Equipment' : 'Select armor & weapon to continue'}
+              {canConfirm ? t.eq_confirmReady : t.eq_confirmWaiting}
             </span>
           </button>
         </div>

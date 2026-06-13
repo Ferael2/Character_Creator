@@ -1,0 +1,35 @@
+.lang-toggle {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid var(--gold-dim, rgba(201, 168, 76, 0.35));
+  color: var(--gold, #c9a84c);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+
+.lang-toggle:hover {
+  background: rgba(201, 168, 76, 0.18);
+  border-color: var(--gold, #c9a84c);
+  box-shadow: 0 0 14px rgba(201, 168, 76, 0.25);
+}
+
+.lang-toggle-flag {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.lang-toggle-text {
+  line-height: 1;
+}

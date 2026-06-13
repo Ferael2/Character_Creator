@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import BackButton from './BackButton'
 import './ClassSelectPage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 import fighterImage from '../src/assets/Fighter.png';
 import rogueImage from '../src/assets/Rogue.png';
 import barbarianImage from '../src/assets/Barbarian.png';
@@ -235,10 +237,12 @@ const CLASSES = [
   },
 ]
 
-const TABS = ['Overview', 'Core Trait', 'Level 1 Features']
 const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ']
 
 export default function ClassSelectPage({ race, background, onSelect, onBack }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
+  const TABS = [t.class_tabDesc, t.class_coreTrait, t.class_tabFeatures]
   const [visible, setVisible]     = useState(false)
   const [current, setCurrent]     = useState(0)
   const [direction, setDirection] = useState(null)
@@ -321,8 +325,8 @@ export default function ClassSelectPage({ race, background, onSelect, onBack }) 
       <main className="class-main">
 
         <header className="class-header">
-          <p className="eyebrow">Character Creation — Step III</p>
-          <h1 className="class-title">Choose Your <span className="accent">Class</span></h1>
+          <p className="eyebrow">{t.class_eyebrow}</p>
+          <h1 className="class-title">{t.class_title} <span className="accent">{t.class_titleAccent}</span></h1>
           {(race || background) && (
             <p className="selections-reminder">
               {race && <span className="sel-item">{race.icon} {race.name}</span>}
@@ -330,12 +334,12 @@ export default function ClassSelectPage({ race, background, onSelect, onBack }) 
               {background && <span className="sel-item">{background.icon} {background.name}</span>}
             </p>
           )}
-          <p className="class-subtitle">Your class defines your fighting style, your magic, and your role in the party.</p>
+          <p className="class-subtitle">{t.class_subtitle}</p>
         </header>
 
         {/* Carousel */}
         <div className="carousel-wrap">
-          <button className="nav-arrow left" onClick={() => navigate('left')} aria-label="Previous class">
+          <button className="nav-arrow left" onClick={() => navigate('left')} aria-label={t.class_prevLabel}>
             <span className="arrow-inner">&#10094;</span>
           </button>
 
@@ -374,15 +378,15 @@ export default function ClassSelectPage({ race, background, onSelect, onBack }) 
                     <span className="card-role">{cls.role}</span>
                     <div className="quick-stats">
                       <div className="stat-chip">
-                        <span className="stat-label">Hit Die</span>
+                        <span className="stat-label">{t.class_hitDie}</span>
                         <span className="stat-value">{cls.hitDie}</span>
                       </div>
                       <div className="stat-chip">
-                        <span className="stat-label">Primary</span>
+                        <span className="stat-label">{t.class_primaryAbility}</span>
                         <span className="stat-value">{cls.primaryAbility}</span>
                       </div>
                       <div className="stat-chip">
-                        <span className="stat-label">Saves</span>
+                        <span className="stat-label">{t.class_savingThrows}</span>
                         <span className="stat-value">{cls.savingThrows.join(' & ')}</span>
                       </div>
                     </div>
@@ -457,7 +461,7 @@ export default function ClassSelectPage({ race, background, onSelect, onBack }) 
                     >
                       <span className="choose-btn-inner">
                         <span className="choose-icon">⬡</span>
-                        Choose {cls.name}
+                        {t.class_chooseBtn} {cls.name}
                       </span>
                     </button>
                   </div>
@@ -467,7 +471,7 @@ export default function ClassSelectPage({ race, background, onSelect, onBack }) 
             </div>
           </div>
 
-          <button className="nav-arrow right" onClick={() => navigate('right')} aria-label="Next class">
+          <button className="nav-arrow right" onClick={() => navigate('right')} aria-label={t.class_nextLabel}>
             <span className="arrow-inner">&#10095;</span>
           </button>
         </div>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BackButton from './BackButton'
 import './LevelUpPage.css'
+import { useLanguage } from './LanguageContext'
+import T from './translations'
 
 const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ']
 
@@ -134,10 +136,12 @@ const SUBCLASS_DESCRIPTIONS = {
 }
 
 function SubclassChoice({ choice, value, onChange }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   return (
     <div className="lu-choice-block">
       <div className="lu-choice-title">{choice.label}</div>
-      <p className="lu-choice-desc">Your dedication and training grant you membership in a specialized group. Choose your subclass — it will define your most powerful abilities in the levels to come.</p>
+      <p className="lu-choice-desc">{t.lu_subclassDesc}</p>
       <div className="lu-option-grid">
         {choice.options.map(opt => (
           <button
@@ -490,7 +494,7 @@ function EpicBoonChoice({ choice, value, onChange }) {
   return (
     <div className="lu-choice-block">
       <div className="lu-choice-title">{choice.label}</div>
-      <p className="lu-choice-desc">You have reached legendary power. Choose one of the following Epic Boons to permanently enhance your abilities.</p>
+      <p className="lu-choice-desc">{t.lu_epicBoonDesc}</p>
       <div className="lu-option-grid">
         {choice.options.map(opt => (
           <button
@@ -510,6 +514,8 @@ function EpicBoonChoice({ choice, value, onChange }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function LevelUpPage({ cls, newLevel, choices, abilityScores, levelUpData, proficiencies, onConfirm, onBack }) {
+  const { lang } = useLanguage()
+  const t = T[lang]
   const [visible, setVisible] = useState(false)
   const [answers, setAnswers] = useState({})
 
@@ -561,17 +567,17 @@ export default function LevelUpPage({ cls, newLevel, choices, abilityScores, lev
       </div>
       <div className="lu-corner tl">✦</div><div className="lu-corner tr">✦</div>
       <div className="lu-corner bl">✦</div><div className="lu-corner br">✦</div>
-      <BackButton onClick={onBack} label="Back to Sheet" />
+      <BackButton onClick={onBack} labelKey="backToSheet" />
 
       <main className="lu-main">
         <header className="lu-header">
-          <p className="lu-eyebrow">Level Up</p>
+          <p className="lu-eyebrow">{t.lu_eyebrow}</p>
           <h1 className="lu-title">
             {cls?.icon} {cls?.name}
             <span className="lu-level-badge">Level {newLevel}</span>
           </h1>
           <p className="lu-subtitle">
-            Power surges through you. Before you advance, make your choices for this level.
+            {t.lu_subtitle}
           </p>
         </header>
 
@@ -602,7 +608,7 @@ export default function LevelUpPage({ cls, newLevel, choices, abilityScores, lev
           >
             <span className="lu-confirm-inner">
               <span>⬡</span>
-              {allDone ? `Advance to Level ${newLevel}` : 'Complete all choices to advance'}
+              {allDone ? `${t.lu_advanceReady} ${newLevel}` : t.lu_advanceWaiting}
             </span>
           </button>
         </div>
